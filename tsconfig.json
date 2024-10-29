@@ -15,5 +15,5 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": ["src", "vitest.setup.ts"]
+  "include": ["src"]
 }

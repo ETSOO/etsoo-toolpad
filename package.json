@@ -1,9 +1,10 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/index.js",
+  "type": "module",
   "types": "build/index.d.ts",
   "sideEffects": false,
   "keywords": [
