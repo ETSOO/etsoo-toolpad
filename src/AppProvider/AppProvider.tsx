@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { Theme } from "@mui/material/styles";
+import { LocaleContextType } from "../shared/locales/LocaleContext";
 
 export interface NavigateOptions {
   history?: "auto" | "push" | "replace";
@@ -54,6 +55,7 @@ export interface Session {
   user?: {
     id?: string | null;
     name?: string | null;
+    latinName?: string | null;
     image?: string | null;
     email?: string | null;
   };
@@ -87,6 +89,10 @@ export interface AppProviderProps {
    * @default null
    */
   branding?: Branding | null;
+  /**
+   * The labels for the component.
+   */
+  localeText?: Partial<LocaleContextType>;
   /**
    * Navigation definition for the app.
    * @default []

@@ -1,15 +1,28 @@
 "use client";
 
 import * as React from "react";
-import DEFAULT_LOCALE_TEXT from "./en";
 
-export type LocaleContextType = {
+const DEFAULT_LOCALE_TEXT = {
   // Account
-  signInLabel?: string;
-  signOutLabel?: string;
+  signInLabel: "Sign In",
+  signOutLabel: "Sign Out",
   // Account Preview
-  iconButtonAriaLabel?: string;
+  accountIconButtonAriaLabel: "Current User",
+  // Menu
+  expandMenuTitle: "Expand menu",
+  expandNavMenuAriaLabel: "Expand navigation menu",
+  collapseMenuTitle: "Collapse menu",
+  collapseNavMenuAriaLabel: "Collapse navigation menu",
+  // Theme
+  switchModeTitle: "Switch mode",
+  darkModeTitle: "Dark mode",
+  lightModeTitle: "Light mode",
+  switchThemeModeAriaLabel: "Switch theme mode",
+  switchToDarkModeAriaLabel: "Switch to dark mode",
+  switchToLightModeAriaLabel: "Switch to light mode"
 };
+
+export type LocaleContextType = typeof DEFAULT_LOCALE_TEXT;
 
 export const LocaleContext =
   React.createContext<LocaleContextType>(DEFAULT_LOCALE_TEXT);
@@ -34,10 +47,6 @@ export function LocaleProvider({ localeText, children }: LocaleProviderProps) {
     </LocaleContext.Provider>
   );
 }
-
-/**
- * @ignore - internal hook.
- */
 
 export function useLocaleText() {
   return React.useContext(LocaleContext);

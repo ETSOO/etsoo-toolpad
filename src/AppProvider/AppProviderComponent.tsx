@@ -13,6 +13,7 @@ import {
   AuthenticationContext,
   SessionContext
 } from "./AppProvider";
+import { LocaleProvider } from "../shared/locales/LocaleContext";
 
 function createTheme(): Theme {
   return createMuiTheme({
@@ -39,6 +40,7 @@ function AppProvider(props: AppProviderProps) {
     children,
     theme = createTheme(),
     branding = null,
+    localeText,
     navigation = [],
     router = null,
     authentication = null,
@@ -52,11 +54,13 @@ function AppProvider(props: AppProviderProps) {
         <SessionContext.Provider value={session}>
           <RouterContext.Provider value={router}>
             <AppThemeProvider theme={theme} window={appWindow}>
-              <BrandingContext.Provider value={branding}>
-                <NavigationContext.Provider value={navigation}>
-                  {children}
-                </NavigationContext.Provider>
-              </BrandingContext.Provider>
+              <LocaleProvider localeText={localeText}>
+                <BrandingContext.Provider value={branding}>
+                  <NavigationContext.Provider value={navigation}>
+                    {children}
+                  </NavigationContext.Provider>
+                </BrandingContext.Provider>
+              </LocaleProvider>
             </AppThemeProvider>
           </RouterContext.Provider>
         </SessionContext.Provider>

@@ -15,7 +15,6 @@ import {
 } from "./PageContainerToolbar";
 import { getItemTitle } from "../shared/navigation";
 import { useActivePage } from "../useActivePage";
-import warnOnce from "../utils/warnOnce";
 
 const PageContentHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -63,11 +62,6 @@ export interface PageContainerProps extends ContainerProps {
    * The breadcrumbs of the page. Leave blank to use the active page breadcrumbs.
    */
   breadcrumbs?: Breadcrumb[];
-  // TODO: Remove in the next major version
-  /**
-   * @deprecated Use `breadcrumbs` instead.
-   */
-  breadCrumbs?: Breadcrumb[];
   /**
    * The components used for each slot inside.
    */
@@ -90,20 +84,12 @@ export interface PageContainerProps extends ContainerProps {
  * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
  */
 function PageContainer(props: PageContainerProps) {
-  const { children, slots, slotProps, breadcrumbs, breadCrumbs, ...rest } =
-    props;
-
-  if (process.env.NODE_ENV !== "production" && breadCrumbs) {
-    warnOnce(
-      "The PageContainer `breadCrumbs` prop is deprecated. Use `breadcrumbs` instead."
-    );
-  }
+  const { children, slots, slotProps, breadcrumbs, ...rest } = props;
 
   const activePage = useActivePage();
 
   // TODO: Remove `props.breadCrumbs` in the next major version
-  const resolvedBreadcrumbs =
-    breadcrumbs ?? breadCrumbs ?? activePage?.breadcrumbs ?? [];
+  const resolvedBreadcrumbs = breadcrumbs ?? activePage?.breadcrumbs ?? [];
   const title = props.title ?? activePage?.title ?? "";
 
   const ToolbarComponent = props?.slots?.toolbar ?? PageContainerToolbar;
@@ -160,15 +146,6 @@ PageContainer.propTypes /* remove-proptypes */ = {
    * The breadcrumbs of the page. Leave blank to use the active page breadcrumbs.
    */
   breadcrumbs: PropTypes.arrayOf(
-    PropTypes.shape({
-      path: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired
-    })
-  ),
-  /**
-   * @deprecated Use `breadcrumbs` instead.
-   */
-  breadCrumbs: PropTypes.arrayOf(
     PropTypes.shape({
       path: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired

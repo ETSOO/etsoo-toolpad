@@ -15,13 +15,8 @@ import type {} from "@mui/material/themeCssVarsAugmentation";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { Link } from "../shared/Link";
-import {
-  BrandingContext,
-  NavigationContext,
-  WindowContext
-} from "../shared/context";
+import { NavigationContext, WindowContext } from "../shared/context";
 import { Account, type AccountProps } from "../Account";
-import { useApplicationTitle } from "../shared/branding";
 import { DashboardSidebarSubNavigation } from "./DashboardSidebarSubNavigation";
 import { ToolbarActions } from "./ToolbarActions";
 import { ThemeSwitcher } from "./ThemeSwitcher";
@@ -29,6 +24,8 @@ import {
   getDrawerSxTransitionMixin,
   getDrawerWidthTransitionMixin
 } from "./utils";
+import { TitleBar } from "./TitleBar";
+import { useLocaleText } from "../shared/locales/LocaleContext";
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   borderWidth: 0,
@@ -39,25 +36,23 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1
 }));
 
-const LogoContainer = styled("div")({
-  position: "relative",
-  height: 40,
-  "& img": {
-    maxHeight: 40
-  }
-});
-
 export interface SidebarFooterProps {
   mini: boolean;
 }
 
 export interface DashboardLayoutSlotProps {
+  titlebar?: {};
   toolbarActions?: {};
   toolbarAccount?: AccountProps;
   sidebarFooter?: SidebarFooterProps;
 }
 
 export interface DashboardLayoutSlots {
+  /**
+   * The title bar component used in the layout header.
+   * @default TitleBar
+   */
+  titlebar?: React.JSXElementConstructor<{}>;
   /**
    * The toolbar actions component used in the layout header.
    * @default ToolbarActions
@@ -96,6 +91,11 @@ export interface DashboardLayoutProps {
    */
   hideNavigation?: boolean;
   /**
+   * Whether the theme switcher should be shown in the toolbar.
+   * @default false
+   */
+  showThemeSwitcher?: boolean;
+  /**
    * Width of the sidebar when expanded.
    * @default 320
    */
@@ -132,6 +132,7 @@ function DashboardLayout(props: DashboardLayoutProps) {
     disableCollapsibleSidebar = false,
     defaultSidebarCollapsed = false,
     hideNavigation = false,
+    showThemeSwitcher = false,
     sidebarExpandedWidth = 320,
     slots,
     slotProps,
@@ -140,10 +141,9 @@ function DashboardLayout(props: DashboardLayoutProps) {
 
   const theme = useTheme();
 
-  const branding = React.useContext(BrandingContext);
   const navigation = React.useContext(NavigationContext);
   const appWindow = React.useContext(WindowContext);
-  const applicationTitle = useApplicationTitle();
+  const localeText = useLocaleText();
 
   const [isDesktopNavigationExpanded, setIsDesktopNavigationExpanded] =
     React.useState(!defaultSidebarCollapsed);
@@ -227,21 +227,22 @@ function DashboardLayout(props: DashboardLayoutProps) {
 
   const getMenuIcon = React.useCallback(
     (isExpanded: boolean) => {
-      const expandMenuActionText = "Expand";
-      const collapseMenuActionText = "Collapse";
-
       return (
         <Tooltip
-          title={`${
-            isExpanded ? collapseMenuActionText : expandMenuActionText
-          } menu`}
+          title={
+            isExpanded
+              ? localeText.collapseMenuTitle
+              : localeText.expandMenuTitle
+          }
           enterDelay={1000}
         >
           <div>
             <IconButton
-              aria-label={`${
-                isExpanded ? collapseMenuActionText : expandMenuActionText
-              } navigation menu`}
+              aria-label={
+                isExpanded
+                  ? localeText.collapseNavMenuAriaLabel
+                  : localeText.expandNavMenuAriaLabel
+              }
               onClick={toggleNavigationExpanded}
             >
               {isExpanded ? <MenuOpenIcon /> : <MenuIcon />}
@@ -256,6 +257,7 @@ function DashboardLayout(props: DashboardLayoutProps) {
   const hasDrawerTransitions =
     isOverSmViewport && (disableCollapsibleSidebar || !isUnderMdViewport);
 
+  const TitlebarSlot = slots?.titlebar ?? TitleBar;
   const ToolbarActionsSlot = slots?.toolbarActions ?? ToolbarActions;
   const ToolbarAccountSlot = slots?.toolbarAccount ?? Account;
   const SidebarFooterSlot = slots?.sidebarFooter ?? null;
@@ -373,29 +375,12 @@ function DashboardLayout(props: DashboardLayoutProps) {
               transform: { xs: "translateX(-50%)", md: "none" }
             }}
           >
-            <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
-              <Stack direction="row" alignItems="center">
-                {branding?.logo && (
-                  <LogoContainer>{branding.logo}</LogoContainer>
-                )}
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: (theme.vars ?? theme).palette.primary.main,
-                    fontWeight: "700",
-                    ml: 0.5,
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  {applicationTitle}
-                </Typography>
-              </Stack>
-            </Link>
+            <TitlebarSlot {...slotProps?.titlebar} />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction="row" spacing={1}>
             <ToolbarActionsSlot {...slotProps?.toolbarActions} />
-            <ThemeSwitcher />
+            {showThemeSwitcher && <ThemeSwitcher />}
             <ToolbarAccountSlot {...slotProps?.toolbarAccount} />
           </Stack>
         </Toolbar>

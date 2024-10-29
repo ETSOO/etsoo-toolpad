@@ -32,7 +32,7 @@ export /**
       }}
       {...props}
     >
-      {localeText?.signInLabel || "Sign In"}
+      {localeText.signInLabel}
     </Button>
   );
 }

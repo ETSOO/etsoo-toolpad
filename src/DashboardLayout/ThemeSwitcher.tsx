@@ -7,6 +7,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { PaletteModeContext } from "../shared/context";
 import useSsr from "../utils/hooks/useSsr";
+import { useLocaleText } from "../shared/locales/LocaleContext";
 
 // TODO: When we use this component as the default for a slot, make it non-internal
 /**
@@ -15,6 +16,7 @@ import useSsr from "../utils/hooks/useSsr";
 function ThemeSwitcher() {
   const isSsr = useSsr();
   const theme = useTheme();
+  const localeText = useLocaleText();
 
   const { paletteMode, setPaletteMode, isDualTheme } =
     React.useContext(PaletteModeContext);
@@ -27,8 +29,10 @@ function ThemeSwitcher() {
     <Tooltip
       title={
         isSsr
-          ? "Switch mode"
-          : `${paletteMode === "dark" ? "Light" : "Dark"} mode`
+          ? localeText.switchModeTitle
+          : paletteMode === "dark"
+          ? localeText.lightModeTitle
+          : localeText.darkModeTitle
       }
       enterDelay={1000}
     >
@@ -36,8 +40,10 @@ function ThemeSwitcher() {
         <IconButton
           aria-label={
             isSsr
-              ? "Switch theme mode"
-              : `Switch to ${paletteMode === "dark" ? "light" : "dark"} mode`
+              ? localeText.switchThemeModeAriaLabel
+              : paletteMode === "dark"
+              ? localeText.switchToLightModeAriaLabel
+              : localeText.switchToDarkModeAriaLabel
           }
           onClick={toggleMode}
           sx={{

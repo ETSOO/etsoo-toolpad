@@ -6,7 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Stack from "@mui/material/Stack";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { SessionContext } from "../AppProvider";
+import { Session, SessionContext } from "../AppProvider";
 import { useLocaleText } from "../shared/locales/LocaleContext";
 
 export type AccountPreviewVariant = "condensed" | "expanded";
@@ -60,6 +60,27 @@ export interface AccountPreviewProps {
   open?: boolean;
 }
 
+function formatNameInitials(user?: Session["user"]) {
+  if (user == null) return null;
+
+  const name = user.latinName || user.name;
+  if (name == null) return null;
+
+  const chars = name
+    .trim()
+    .split(/\s+/g)
+    .map((part) => {
+      const firstChar = part.charAt(0).toUpperCase();
+      return firstChar >= "A" && firstChar <= "Z" ? firstChar : "";
+    })
+    .filter((c) => c)
+    .slice(-2);
+
+  if (chars.length === 0) return null;
+
+  return chars.join("");
+}
+
 /**
  * The AccountPreview component displays user account information.
  *
@@ -91,7 +112,9 @@ function AccountPreview(props: AccountPreviewProps) {
         width: variant === "expanded" ? 48 : 32
       }}
       {...slotProps?.avatar}
-    />
+    >
+      {session.user?.image ? null : formatNameInitials(session.user)}
+    </Avatar>
   );
 
   if (variant === "expanded") {
@@ -135,7 +158,7 @@ function AccountPreview(props: AccountPreviewProps) {
       ) : (
         <IconButton
           onClick={handleClick}
-          aria-label={localeText.iconButtonAriaLabel || "Current User"}
+          aria-label={localeText.accountIconButtonAriaLabel}
           size="small"
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"

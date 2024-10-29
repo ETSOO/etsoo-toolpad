@@ -41,7 +41,7 @@ describe("DashboardLayout", () => {
 
     render(
       <AppProvider>
-        <DashboardLayout>Hello world</DashboardLayout>
+        <DashboardLayout showThemeSwitcher>Hello world</DashboardLayout>
       </AppProvider>
     );
 

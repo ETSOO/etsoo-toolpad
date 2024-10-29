@@ -13,7 +13,6 @@ import {
   SessionContext,
   AuthenticationContext
 } from "../AppProvider/AppProvider";
-import { LocaleProvider, useLocaleText } from "../shared/locales/LocaleContext";
 
 export interface AccountSlots {
   /**
@@ -58,10 +57,6 @@ export interface AccountProps {
     signInButton?: React.ComponentProps<typeof SignInButton>;
     signOutButton?: React.ComponentProps<typeof Button>;
   };
-  /**
-   * The labels for the account component.
-   */
-  localeText?: Partial<ReturnType<typeof useLocaleText>>;
 }
 /**
  *
@@ -76,7 +71,6 @@ export interface AccountProps {
  * - [Account API](https://mui.com/toolpad/core/api/account)
  */
 function Account(props: AccountProps) {
-  const { localeText } = props;
   const { slots, slotProps } = props;
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const session = React.useContext(SessionContext);
@@ -96,19 +90,15 @@ function Account(props: AccountProps) {
   }
 
   if (!session?.user) {
-    return (
-      <LocaleProvider localeText={localeText}>
-        {slots?.signInButton ? (
-          <slots.signInButton onClick={authentication.signIn} />
-        ) : (
-          <SignInButton {...slotProps?.signInButton} />
-        )}
-      </LocaleProvider>
+    return slots?.signInButton ? (
+      <slots.signInButton onClick={authentication.signIn} />
+    ) : (
+      <SignInButton {...slotProps?.signInButton} />
     );
   }
 
   return (
-    <LocaleProvider localeText={localeText}>
+    <React.Fragment>
       {slots?.preview ? (
         <slots.preview handleClick={handleClick} open={open} />
       ) : (
@@ -170,7 +160,7 @@ function Account(props: AccountProps) {
           )}
         </Popover>
       )}
-    </LocaleProvider>
+    </React.Fragment>
   );
 }
 
@@ -179,14 +169,6 @@ Account.propTypes /* remove-proptypes */ = {
   // │ These PropTypes are generated from the TypeScript type definitions. │
   // │ To update them, edit the TypeScript types and run `pnpm proptypes`. │
   // └─────────────────────────────────────────────────────────────────────┘
-  /**
-   * The labels for the account component.
-   */
-  localeText: PropTypes.shape({
-    iconButtonAriaLabel: PropTypes.string,
-    signInLabel: PropTypes.string,
-    signOutLabel: PropTypes.string
-  }),
   /**
    * The props used for each slot inside.
    */
