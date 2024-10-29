@@ -1,11 +1,24 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/index.js",
   "type": "module",
-  "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js"
+    },
+    "./nextjs": {
+      "types": "./nextjs/index.d.ts",
+      "import": "./nextjs/index.js"
+    },
+    "./react-router-dom": {
+      "types": "./react-router-dom/index.d.ts",
+      "import": "./react-router-dom/index.js"
+    }
+  },
   "sideEffects": false,
   "keywords": [
     "react",
