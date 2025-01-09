@@ -1,5 +1,4 @@
 "use client";
-import PropTypes from "prop-types";
 import {
   BrandingContext,
   NavigationContext,
@@ -68,99 +67,5 @@ function AppProvider(props: AppProviderProps) {
     </WindowContext.Provider>
   );
 }
-
-AppProvider.propTypes /* remove-proptypes */ = {
-  // ┌────────────────────────────── Warning ──────────────────────────────┐
-  // │ These PropTypes are generated from the TypeScript type definitions. │
-  // │ To update them, edit the TypeScript types and run `pnpm proptypes`. │
-  // └─────────────────────────────────────────────────────────────────────┘
-  /**
-   * Authentication methods.
-   * @default null
-   */
-  authentication: PropTypes.shape({
-    signIn: PropTypes.func.isRequired,
-    signOut: PropTypes.func.isRequired
-  }),
-  /**
-   * Branding options for the app.
-   * @default null
-   */
-  branding: PropTypes.shape({
-    logo: PropTypes.node,
-    title: PropTypes.node
-  }),
-  /**
-   * The content of the app provider.
-   */
-  children: PropTypes.node,
-  /**
-   * Navigation definition for the app.
-   * @default []
-   */
-  navigation: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.shape({
-        action: PropTypes.node,
-        children: PropTypes.arrayOf(
-          PropTypes.oneOfType([
-            PropTypes.object,
-            PropTypes.shape({
-              kind: PropTypes.oneOf(["header"]).isRequired,
-              title: PropTypes.string.isRequired
-            }),
-            PropTypes.shape({
-              kind: PropTypes.oneOf(["divider"]).isRequired
-            })
-          ]).isRequired
-        ),
-        icon: PropTypes.node,
-        kind: PropTypes.oneOf(["page"]),
-        pattern: PropTypes.string,
-        segment: PropTypes.string,
-        title: PropTypes.string
-      }),
-      PropTypes.shape({
-        kind: PropTypes.oneOf(["header"]).isRequired,
-        title: PropTypes.string.isRequired
-      }),
-      PropTypes.shape({
-        kind: PropTypes.oneOf(["divider"]).isRequired
-      })
-    ]).isRequired
-  ),
-  /**
-   * Router implementation used inside Toolpad components.
-   * @default null
-   */
-  router: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-    pathname: PropTypes.string.isRequired,
-    searchParams: PropTypes.instanceOf(URLSearchParams).isRequired
-  }),
-  /**
-   * Session info about the current user.
-   * @default null
-   */
-  session: PropTypes.shape({
-    user: PropTypes.shape({
-      email: PropTypes.string,
-      id: PropTypes.string,
-      image: PropTypes.string,
-      name: PropTypes.string
-    })
-  }),
-  /**
-   * [Theme or themes](https://mui.com/toolpad/core/react-app-provider/#theming) to be used by the app in light/dark mode. A [CSS variables theme](https://mui.com/material-ui/customization/css-theme-variables/overview/) is recommended.
-   * @default createTheme()
-   */
-  theme: PropTypes.object,
-  /**
-   * The window where the application is rendered.
-   * This is needed when rendering the app inside an iframe, for example.
-   * @default window
-   */
-  window: PropTypes.object
-} as any;
 
 export { AppProvider };

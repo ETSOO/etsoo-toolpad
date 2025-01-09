@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import PropTypes from "prop-types";
 import { styled, useTheme, type Theme, SxProps } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -9,12 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import type {} from "@mui/material/themeCssVarsAugmentation";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { Link } from "../shared/Link";
 import { NavigationContext, WindowContext } from "../shared/context";
 import { Account, type AccountProps } from "../Account";
 import { DashboardSidebarSubNavigation } from "./DashboardSidebarSubNavigation";
@@ -455,89 +452,5 @@ function DashboardLayout(props: DashboardLayoutProps) {
     </Box>
   );
 }
-
-DashboardLayout.propTypes /* remove-proptypes */ = {
-  // ┌────────────────────────────── Warning ──────────────────────────────┐
-  // │ These PropTypes are generated from the TypeScript type definitions. │
-  // │ To update them, edit the TypeScript types and run `pnpm proptypes`. │
-  // └─────────────────────────────────────────────────────────────────────┘
-  /**
-   * The content of the dashboard.
-   */
-  children: PropTypes.node,
-  /**
-   * Whether the sidebar should start collapsed in desktop size screens.
-   * @default false
-   */
-  defaultSidebarCollapsed: PropTypes.bool,
-  /**
-   * Whether the sidebar should not be collapsible to a mini variant in desktop and tablet viewports.
-   * @default false
-   */
-  disableCollapsibleSidebar: PropTypes.bool,
-  /**
-   * Whether the navigation bar and menu icon should be hidden
-   * @default false
-   */
-  hideNavigation: PropTypes.bool,
-  /**
-   * Width of the sidebar when expanded.
-   * @default 320
-   */
-  sidebarExpandedWidth: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  /**
-   * The props used for each slot inside.
-   * @default {}
-   */
-  slotProps: PropTypes.shape({
-    sidebarFooter: PropTypes.shape({
-      mini: PropTypes.bool.isRequired
-    }),
-    toolbarAccount: PropTypes.shape({
-      localeText: PropTypes.shape({
-        iconButtonAriaLabel: PropTypes.string,
-        signInLabel: PropTypes.string,
-        signOutLabel: PropTypes.string
-      }),
-      slotProps: PropTypes.shape({
-        popover: PropTypes.object,
-        popoverContent: PropTypes.object,
-        preview: PropTypes.object,
-        signInButton: PropTypes.object,
-        signOutButton: PropTypes.object
-      }),
-      slots: PropTypes.shape({
-        popover: PropTypes.elementType,
-        popoverContent: PropTypes.elementType,
-        preview: PropTypes.elementType,
-        signInButton: PropTypes.elementType,
-        signOutButton: PropTypes.elementType
-      })
-    }),
-    toolbarActions: PropTypes.object
-  }),
-  /**
-   * The components used for each slot inside.
-   * @default {}
-   */
-  slots: PropTypes.shape({
-    sidebarFooter: PropTypes.elementType,
-    toolbarAccount: PropTypes.elementType,
-    toolbarActions: PropTypes.elementType
-  }),
-  /**
-   * The system prop that allows defining system overrides as well as additional CSS styles.
-   */
-  sx: PropTypes.oneOfType([
-    PropTypes.arrayOf(
-      PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool])
-    ),
-    PropTypes.func,
-    PropTypes.object
-  ])
-} as any;
 
 export { DashboardLayout };

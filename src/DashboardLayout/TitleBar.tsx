@@ -54,14 +54,16 @@ export function TitleBar() {
     return [title, false];
   }, [title]);
 
-  if (!hasLink) return titleUI;
-
-  return (
-    <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
-      <Stack direction="row" alignItems="center">
-        {branding?.logo && <LogoContainer>{branding.logo}</LogoContainer>}
-        {titleUI}
-      </Stack>
-    </Link>
-  );
+  if (hasLink) {
+    return (
+      <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
+        <Stack direction="row" alignItems="center">
+          {branding?.logo && <LogoContainer>{branding.logo}</LogoContainer>}
+          {titleUI}
+        </Stack>
+      </Link>
+    );
+  } else {
+    return titleUI;
+  }
 }

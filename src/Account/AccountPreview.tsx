@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import Avatar, { AvatarProps } from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -171,42 +170,5 @@ function AccountPreview(props: AccountPreviewProps) {
     </Tooltip>
   );
 }
-
-AccountPreview.propTypes /* remove-proptypes */ = {
-  // ┌────────────────────────────── Warning ──────────────────────────────┐
-  // │ These PropTypes are generated from the TypeScript type definitions. │
-  // │ To update them, edit the TypeScript types and run `pnpm proptypes`. │
-  // └─────────────────────────────────────────────────────────────────────┘
-  /**
-   * The handler used when the preview is expanded
-   */
-  handleClick: PropTypes.func,
-  /**
-   * The state of the Account popover
-   * @default false
-   */
-  open: PropTypes.bool,
-  /**
-   * The props used for each slot inside.
-   */
-  slotProps: PropTypes.shape({
-    avatar: PropTypes.object,
-    avatarIconButton: PropTypes.object,
-    moreIconButton: PropTypes.object
-  }),
-  /**
-   * The components used for each slot inside.
-   */
-  slots: PropTypes.shape({
-    avatar: PropTypes.elementType
-  }),
-  /**
-   * The type of account details to display.
-   * @property {'condensed'} condensed - Shows only the user's avatar.
-   * @property {'expanded'} expanded - Displays the user's avatar, name, and email if available.
-   * @default 'condensed'
-   */
-  variant: PropTypes.oneOf(["condensed", "expanded"])
-} as any;
 
 export { AccountPreview };

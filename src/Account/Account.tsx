@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
 import Divider from "@mui/material/Divider";
@@ -163,46 +162,5 @@ function Account(props: AccountProps) {
     </React.Fragment>
   );
 }
-
-Account.propTypes /* remove-proptypes */ = {
-  // ┌────────────────────────────── Warning ──────────────────────────────┐
-  // │ These PropTypes are generated from the TypeScript type definitions. │
-  // │ To update them, edit the TypeScript types and run `pnpm proptypes`. │
-  // └─────────────────────────────────────────────────────────────────────┘
-  /**
-   * The props used for each slot inside.
-   */
-  slotProps: PropTypes.shape({
-    popover: PropTypes.object,
-    popoverContent: PropTypes.object,
-    preview: PropTypes.shape({
-      handleClick: PropTypes.func,
-      open: PropTypes.bool,
-      slotProps: PropTypes.shape({
-        avatar: PropTypes.object,
-        avatarIconButton: PropTypes.object,
-        moreIconButton: PropTypes.object
-      }),
-      slots: PropTypes.shape({
-        avatar: PropTypes.elementType,
-        avatarIconButton: PropTypes.elementType,
-        moreIconButton: PropTypes.elementType
-      }),
-      variant: PropTypes.oneOf(["condensed", "expanded"])
-    }),
-    signInButton: PropTypes.object,
-    signOutButton: PropTypes.object
-  }),
-  /**
-   * The components used for each slot inside.
-   */
-  slots: PropTypes.shape({
-    popover: PropTypes.elementType,
-    popoverContent: PropTypes.elementType,
-    preview: PropTypes.elementType,
-    signInButton: PropTypes.elementType,
-    signOutButton: PropTypes.elementType
-  })
-} as any;
 
 export { Account };
