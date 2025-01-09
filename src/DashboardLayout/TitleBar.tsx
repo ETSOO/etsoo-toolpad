@@ -1,6 +1,5 @@
 import { Stack, styled, Typography, useTheme } from "@mui/material";
 import { Link } from "../shared/Link";
-import { useApplicationTitle } from "../shared/branding";
 import React from "react";
 import { BrandingContext } from "../shared/context";
 
@@ -16,16 +15,26 @@ export function TitleBar() {
   // Theme
   const theme = useTheme();
 
-  // Application title
-  const applicationTitle = useApplicationTitle();
-
   // Branding
   const branding = React.useContext(BrandingContext);
 
-  return (
-    <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
-      <Stack direction="row" alignItems="center">
-        {branding?.logo && <LogoContainer>{branding.logo}</LogoContainer>}
+  // Application title
+  const title = branding?.title;
+  const titleUI = React.useMemo(() => {
+    if (title == null) return;
+
+    if (typeof title === "string" || Array.isArray(title)) {
+      let titleString: string;
+      let clickHandler:
+        | ((handler: React.MouseEvent<HTMLSpanElement>) => void)
+        | undefined;
+      if (Array.isArray(title)) {
+        titleString = title[0];
+        clickHandler = title[1];
+      } else {
+        titleString = title;
+      }
+      return (
         <Typography
           variant="h6"
           sx={{
@@ -34,9 +43,21 @@ export function TitleBar() {
             ml: 0.5,
             whiteSpace: "nowrap"
           }}
+          onClick={clickHandler == null ? undefined : (e) => clickHandler(e)}
         >
-          {applicationTitle}
+          {titleString}
         </Typography>
+      );
+    }
+
+    return title;
+  }, [title]);
+
+  return (
+    <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
+      <Stack direction="row" alignItems="center">
+        {branding?.logo && <LogoContainer>{branding.logo}</LogoContainer>}
+        {titleUI}
       </Stack>
     </Link>
   );

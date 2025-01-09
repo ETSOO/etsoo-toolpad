@@ -21,7 +21,10 @@ export interface Router {
 }
 
 export interface Branding {
-  title?: string;
+  title?:
+    | string
+    | React.ReactNode
+    | [string, (handler: React.MouseEvent<HTMLSpanElement>) => void];
   logo?: React.ReactNode;
 }
 
