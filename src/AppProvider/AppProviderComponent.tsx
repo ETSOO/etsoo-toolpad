@@ -88,7 +88,7 @@ AppProvider.propTypes /* remove-proptypes */ = {
    */
   branding: PropTypes.shape({
     logo: PropTypes.node,
-    title: PropTypes.string
+    title: PropTypes.node
   }),
   /**
    * The content of the app provider.

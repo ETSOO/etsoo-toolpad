@@ -20,8 +20,8 @@ export function TitleBar() {
 
   // Application title
   const title = branding?.title;
-  const titleUI = React.useMemo(() => {
-    if (title == null) return;
+  const [titleUI, hasLink] = React.useMemo(() => {
+    if (title == null) return [undefined, true];
 
     if (typeof title === "string" || Array.isArray(title)) {
       let titleString: string;
@@ -34,7 +34,7 @@ export function TitleBar() {
       } else {
         titleString = title;
       }
-      return (
+      return [
         <Typography
           variant="h6"
           sx={{
@@ -46,12 +46,15 @@ export function TitleBar() {
           onClick={clickHandler == null ? undefined : (e) => clickHandler(e)}
         >
           {titleString}
-        </Typography>
-      );
+        </Typography>,
+        true
+      ];
     }
 
-    return title;
+    return [title, false];
   }, [title]);
+
+  if (!hasLink) return titleUI;
 
   return (
     <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
