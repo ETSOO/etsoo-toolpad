@@ -35,6 +35,7 @@ export interface NavigationPageItem {
   pattern?: string;
   action?: React.ReactNode;
   children?: Navigation;
+  subs?: string[];
 }
 
 export interface NavigationSubheaderItem {

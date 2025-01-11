@@ -1,7 +1,7 @@
 import { expect, describe, test, vi } from "vitest";
-import { render, within, screen } from "@testing-library/react";
+import { render, within, screen, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { PageContainer } from "./PageContainer";
+import { PageContainer, PageDataContextProvider } from "./PageContainer";
 import describeConformance from "../utils/describeConformance";
 import { AppProvider } from "../AppProvider/AppProviderComponent";
 
@@ -14,23 +14,28 @@ describe("PageContainer", () => {
   }));
 
   test("renders page container correctly", async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     const router = {
       pathname: "/orders",
       searchParams: new URLSearchParams(),
       navigate: vi.fn()
     };
-    render(
-      <AppProvider
-        navigation={[
-          { segment: "", title: "Home" },
-          { segment: "orders", title: "Orders" }
-        ]}
-        router={router}
-      >
-        <PageContainer />
-      </AppProvider>
-    );
+
+    act(() => {
+      render(
+        <AppProvider
+          navigation={[
+            { segment: "", title: "Home" },
+            { segment: "orders", title: "Orders" }
+          ]}
+          router={router}
+        >
+          <PageDataContextProvider>
+            <PageContainer />
+          </PageDataContextProvider>
+        </AppProvider>
+      );
+    });
 
     const breadcrumbs = screen.getByRole("navigation", { name: "breadcrumb" });
 
@@ -70,11 +75,20 @@ describe("PageContainer", () => {
     };
 
     const branding = { title: "ACME" };
-    render(
-      <AppProvider branding={branding} navigation={navigation} router={router}>
-        <PageContainer />
-      </AppProvider>
-    );
+
+    act(() => {
+      render(
+        <AppProvider
+          branding={branding}
+          navigation={navigation}
+          router={router}
+        >
+          <PageDataContextProvider>
+            <PageContainer />
+          </PageDataContextProvider>
+        </AppProvider>
+      );
+    });
 
     const breadcrumbs = screen.getByRole("navigation", { name: "breadcrumb" });
 
@@ -84,27 +98,33 @@ describe("PageContainer", () => {
   });
 
   test("renders dynamic correctly", async () => {
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     const router = {
       pathname: "/orders/123",
       searchParams: new URLSearchParams(),
       navigate: vi.fn()
     };
-    render(
-      <AppProvider
-        navigation={[
-          { segment: "", title: "Home" },
-          { segment: "orders", title: "Orders", pattern: "orders/:id" }
-        ]}
-        router={router}
-      >
-        <PageContainer />
-      </AppProvider>
-    );
+
+    act(() => {
+      render(
+        <AppProvider
+          navigation={[
+            { segment: "", title: "Home" },
+            { segment: "orders", title: "Orders", pattern: "orders/:id" }
+          ]}
+          router={router}
+        >
+          <PageDataContextProvider>
+            <PageContainer />
+          </PageDataContextProvider>
+        </AppProvider>
+      );
+    });
 
     const breadcrumbs = screen.getByRole("navigation", { name: "breadcrumb" });
 
     const homeLink = within(breadcrumbs).getByRole("link", { name: "Home" });
+
     await user.click(homeLink);
 
     expect(router.navigate).toHaveBeenCalledWith(
@@ -124,26 +144,31 @@ describe("PageContainer", () => {
       searchParams: new URLSearchParams(),
       navigate: vi.fn()
     };
-    render(
-      <AppProvider
-        navigation={[
-          {
-            segment: "users",
-            title: "Users",
-            children: [
-              {
-                segment: "invoices",
-                title: "Invoices",
-                pattern: "invoices/:id"
-              }
-            ]
-          }
-        ]}
-        router={router}
-      >
-        <PageContainer />
-      </AppProvider>
-    );
+
+    act(() => {
+      render(
+        <AppProvider
+          navigation={[
+            {
+              segment: "users",
+              title: "Users",
+              children: [
+                {
+                  segment: "invoices",
+                  title: "Invoices",
+                  pattern: "invoices/:id"
+                }
+              ]
+            }
+          ]}
+          router={router}
+        >
+          <PageDataContextProvider>
+            <PageContainer />
+          </PageDataContextProvider>
+        </AppProvider>
+      );
+    });
 
     const breadcrumbs = screen.getByRole("navigation", { name: "breadcrumb" });
 
@@ -153,14 +178,18 @@ describe("PageContainer", () => {
   });
 
   test("renders custom breadcrumbs", async () => {
-    render(
-      <PageContainer
-        breadcrumbs={[
-          { title: "Hello", path: "/hello" },
-          { title: "World", path: "/world" }
-        ]}
-      />
-    );
+    act(() => {
+      render(
+        <PageDataContextProvider
+          breadcrumbs={[
+            { title: "Hello", path: "/hello" },
+            { title: "World", path: "/world" }
+          ]}
+        >
+          <PageContainer />
+        </PageDataContextProvider>
+      );
+    });
 
     const breadcrumbs = screen.getByRole("navigation", { name: "breadcrumb" });
 

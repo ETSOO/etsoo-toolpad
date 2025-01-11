@@ -45,31 +45,61 @@ export interface Breadcrumb {
   path: string;
 }
 
-// TODO: Remove in the next major version
-/**
- * @deprecated Use `Breadcrumb` instead.
- */
-export type BreadCrumb = Breadcrumb;
-
-export interface PageContainerProps extends ContainerProps {
-  children?: React.ReactNode;
-  /**
-   * The title of the page. Leave blank to use the active page title.
-   */
+export type PageData = {
   title?: string;
-  /**
-   * The breadcrumbs of the page. Leave blank to use the active page breadcrumbs.
-   */
+  page?: string;
   breadcrumbs?: Breadcrumb[];
-  /**
-   * The components used for each slot inside.
-   */
-  slots?: PageContainerSlots;
-  /**
-   * The props used for each slot inside.
-   */
-  slotProps?: PageContainerSlotProps;
+};
+
+type PageDataAction = PageData | true;
+
+export const PageDataContext = React.createContext<{
+  state: PageData;
+  dispatch: React.Dispatch<PageDataAction>;
+}>({ state: {}, dispatch: (value) => value });
+
+function reducer(state: PageData, action: PageDataAction) {
+  if (action === true) {
+    // Reset the state
+    if (
+      state.breadcrumbs == null &&
+      state.title == null &&
+      state.page == null
+    ) {
+      return state;
+    } else {
+      return {};
+    }
+  }
+
+  return { ...state, ...action };
 }
+
+export function PageDataContextProvider(
+  props: React.PropsWithChildren<PageData>
+) {
+  // Destruct
+  const { title, breadcrumbs, ...rest } = props;
+
+  // useReducer hook to manage state with our reducer function and initial state
+  const [state, dispatch] = React.useReducer(reducer, { title, breadcrumbs });
+
+  // Provide the state and dispatch function to the context value
+  return <PageDataContext.Provider value={{ state, dispatch }} {...rest} />;
+}
+
+export type PageContainerProps = React.PropsWithChildren<
+  ContainerProps & {
+    /**
+     * The components used for each slot inside.
+     */
+    slots?: PageContainerSlots;
+    /**
+     * The props used for each slot inside.
+     */
+    slotProps?: PageContainerSlotProps;
+  }
+>;
 
 /**
  * A container component to provide a title and breadcrumbs for your pages.
@@ -83,13 +113,30 @@ export interface PageContainerProps extends ContainerProps {
  * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
  */
 function PageContainer(props: PageContainerProps) {
-  const { children, slots, slotProps, breadcrumbs, ...rest } = props;
+  const { children, slots, slotProps, ...rest } = props;
+
+  const loaded = React.useRef(false);
+  const { state, dispatch } = React.useContext(PageDataContext);
 
   const activePage = useActivePage();
 
-  // TODO: Remove `props.breadCrumbs` in the next major version
-  const resolvedBreadcrumbs = breadcrumbs ?? activePage?.breadcrumbs ?? [];
-  const title = props.title ?? activePage?.title ?? "";
+  React.useLayoutEffect(() => {
+    if (loaded.current) {
+      dispatch(true);
+    } else {
+      loaded.current = true;
+    }
+  }, [activePage?.sourcePath]);
+
+  let resolvedBreadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
+  const title = state.title ?? activePage?.title ?? "";
+
+  if (state.page) {
+    resolvedBreadcrumbs = [
+      ...resolvedBreadcrumbs,
+      { title: state.page, path: "#" }
+    ];
+  }
 
   const ToolbarComponent = props?.slots?.toolbar ?? PageContainerToolbar;
   const toolbarSlotProps = useSlotProps({

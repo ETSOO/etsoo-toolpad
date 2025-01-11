@@ -32,9 +32,15 @@ export function isPageItemSelected(
   basePath: string,
   pathname: string
 ) {
-  return navigationItem.pattern
-    ? pathToRegexp(`${basePath}/${navigationItem.pattern}`).test(pathname)
-    : getPageItemFullPath(basePath, navigationItem) === pathname;
+  if (navigationItem.pattern) {
+    return pathToRegexp(`${basePath}/${navigationItem.pattern}`).test(pathname);
+  }
+
+  if (navigationItem.subs) {
+    return navigationItem.subs.some((sub) => new RegExp(sub).test(pathname));
+  }
+
+  return getPageItemFullPath(basePath, navigationItem) === pathname;
 }
 
 export function hasSelectedNavigationChildren(
@@ -172,11 +178,12 @@ export function matchPath(
   const lookup = getItemLookup(navigation);
 
   for (const [key, item] of lookup.entries()) {
-    if (typeof key === "string" && key === path) {
-      return item;
-    }
-    if (key instanceof RegExp && key.test(path)) {
-      return item;
+    if (typeof key === "string") {
+      if (key === path) return item;
+      else if (item.subs?.some((sub) => new RegExp(sub).test(path)))
+        return item;
+    } else if (key instanceof RegExp) {
+      if (key.test(path)) return item;
     }
   }
 

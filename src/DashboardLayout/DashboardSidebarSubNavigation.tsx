@@ -175,21 +175,10 @@ function DashboardSidebarSubNavigation({
 
         const listItemIconSize = 34;
 
-        const isSelected = isPageItemSelected(
-          navigationItem,
-          basePath,
-          pathname
-        );
-
-        if (
-          process.env.NODE_ENV !== "production" &&
-          isSelected &&
-          selectedItemId
-        ) {
-          console.warn(
-            `Duplicate selected path in navigation: ${navigationItemFullPath}`
-          );
-        }
+        // If the item is selected, we don't want to select more
+        const isSelected = selectedItemId
+          ? false
+          : isPageItemSelected(navigationItem, basePath, pathname);
 
         if (isSelected && !selectedItemId) {
           selectedItemId = navigationItemId;
