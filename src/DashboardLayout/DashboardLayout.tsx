@@ -9,7 +9,6 @@ import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import type {} from "@mui/material/themeCssVarsAugmentation";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { NavigationContext, WindowContext } from "../shared/context";
@@ -23,15 +22,6 @@ import {
 } from "./utils";
 import { TitleBar } from "./TitleBar";
 import { useLocaleText } from "../shared/locales/LocaleContext";
-
-const AppBar = styled(MuiAppBar)(({ theme }) => ({
-  borderWidth: 0,
-  borderBottomWidth: 1,
-  borderStyle: "solid",
-  borderColor: (theme.vars ?? theme).palette.divider,
-  boxShadow: "none",
-  zIndex: theme.zIndex.drawer + 1
-}));
 
 export interface SidebarFooterProps {
   mini: boolean;
@@ -337,7 +327,18 @@ function DashboardLayout(props: DashboardLayoutProps) {
         ...sx
       }}
     >
-      <AppBar color="inherit" position="absolute">
+      <MuiAppBar
+        color="inherit"
+        position="absolute"
+        sx={(theme) => ({
+          borderWidth: 0,
+          borderBottomWidth: 1,
+          borderStyle: "solid",
+          borderColor: theme.palette.divider,
+          boxShadow: "none",
+          zIndex: theme.zIndex.drawer + 1
+        })}
+      >
         <Toolbar
           sx={{ backgroundColor: "inherit", mx: { xs: -0.75, sm: -1.5 } }}
         >
@@ -381,7 +382,7 @@ function DashboardLayout(props: DashboardLayoutProps) {
             <ToolbarAccountSlot {...slotProps?.toolbarAccount} />
           </Stack>
         </Toolbar>
-      </AppBar>
+      </MuiAppBar>
 
       {!hideNavigation ? (
         <React.Fragment>

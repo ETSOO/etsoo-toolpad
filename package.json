@@ -1,23 +1,25 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
-  "main": "build/index.js",
-  "module": "build/index.js",
-  "type": "module",
+  "main": "build/cjs/index.js",
+  "module": "build/mjs/index.js",
   "exports": {
     ".": {
-      "types": "./build/index.d.ts",
-      "import": "./build/index.js"
+      "types": "./build/mjs/index.d.ts",
+      "import": "./build/mjs/index.js",
+      "require": "./build/cjs/index.js"
     },
     "./nextjs": {
-      "types": "./build/nextjs/index.d.ts",
-      "import": "./build/nextjs/index.js"
+      "types": "./build/mjs/nextjs/index.d.ts",
+      "import": "./build/mjs/nextjs/index.js",
+      "require": "./build/cjs/nextjs/index.js"
     },
     "./react-router-dom": {
-      "types": "./build/react-router-dom/index.d.ts",
-      "import": "./build/react-router-dom/index.js"
+      "types": "./build/mjs/react-router-dom/index.d.ts",
+      "import": "./build/mjs/react-router-dom/index.js",
+      "require": "./build/cjs/react-router-dom/index.js"
     }
   },
   "sideEffects": false,
@@ -38,38 +40,46 @@
   },
   "homepage": "https://github.com/ETSOO/etsoo-toolpad#readme",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json",
     "test": "vitest",
     "testb": "vitest --browser.enabled"
   },
   "dependencies": {
-    "@babel/runtime": "^7.26.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "6.3.1",
+    "@mui/material": "6.3.1",
     "@mui/utils": "6.3.1",
     "invariant": "2.2.4",
     "path-to-regexp": "6.3.0",
-    "react": "^18.3.1"
-  },
-  "overrides": {
-    "react": "$react",
-    "@emotion/react": "$@emotion/react"
+    "react": "^19.0.0"
   },
   "devDependencies": {
-    "@mui/icons-material": "6.3.1",
-    "@mui/material": "6.3.1",
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.0",
+    "@babel/plugin-transform-runtime": "^7.25.9",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/runtime-corejs3": "^7.26.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/invariant": "2.2.37",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "19.0.4",
+    "@types/react-dom": "19.0.2",
     "@vitejs/plugin-react": "4.3.4",
     "@vitest/browser": "2.1.8",
-    "jsdom": "^25.0.1",
-    "next": "^15.0.3",
+    "jsdom": "^26.0.0",
+    "next": "^15.1.4",
     "next-router-mock": "^0.9.13",
     "playwright": "^1.49.1",
     "react-router-dom": "7.1.1",
     "vitest": "2.1.8"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
+    "react-router-dom": {
+      "optional": true
+    }
   }
 }

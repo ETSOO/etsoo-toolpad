@@ -79,10 +79,14 @@ export function PageDataContextProvider(
   props: React.PropsWithChildren<PageData>
 ) {
   // Destruct
-  const { title, breadcrumbs, ...rest } = props;
+  const { title, page, breadcrumbs, ...rest } = props;
 
   // useReducer hook to manage state with our reducer function and initial state
-  const [state, dispatch] = React.useReducer(reducer, { title, breadcrumbs });
+  const [state, dispatch] = React.useReducer(reducer, {
+    title,
+    page,
+    breadcrumbs
+  });
 
   // Provide the state and dispatch function to the context value
   return <PageDataContext.Provider value={{ state, dispatch }} {...rest} />;
@@ -90,6 +94,10 @@ export function PageDataContextProvider(
 
 export type PageContainerProps = React.PropsWithChildren<
   ContainerProps & {
+    /**
+     * The default title of the page.
+     */
+    defaultTitle?: string;
     /**
      * The components used for each slot inside.
      */
@@ -113,7 +121,7 @@ export type PageContainerProps = React.PropsWithChildren<
  * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
  */
 function PageContainer(props: PageContainerProps) {
-  const { children, slots, slotProps, ...rest } = props;
+  const { children, defaultTitle, slots, slotProps, ...rest } = props;
 
   const loaded = React.useRef(false);
   const { state, dispatch } = React.useContext(PageDataContext);
@@ -129,7 +137,7 @@ function PageContainer(props: PageContainerProps) {
   }, [activePage?.sourcePath]);
 
   let resolvedBreadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
-  const title = state.title ?? activePage?.title ?? "";
+  const title = state.title ?? defaultTitle ?? activePage?.title ?? "";
 
   if (state.page) {
     resolvedBreadcrumbs = [
