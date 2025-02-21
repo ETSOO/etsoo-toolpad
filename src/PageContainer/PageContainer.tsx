@@ -1,9 +1,8 @@
 "use client";
 import * as React from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Container, { ContainerProps } from "@mui/material/Container";
 import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
+import Stack, { StackProps } from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useSlotProps from "@mui/utils/useSlotProps";
 import { styled } from "@mui/material";
@@ -93,7 +92,7 @@ export function PageDataContextProvider(
 }
 
 export type PageContainerProps = React.PropsWithChildren<
-  ContainerProps & {
+  StackProps & {
     /**
      * The default title of the page.
      */
@@ -155,39 +154,37 @@ function PageContainer(props: PageContainerProps) {
   });
 
   return (
-    <Container {...rest}>
-      <Stack sx={{ my: 2 }} spacing={2}>
-        <Stack>
-          <Breadcrumbs aria-label="breadcrumb">
-            {resolvedBreadcrumbs
-              ? resolvedBreadcrumbs.map((item, index) => {
-                  return index < resolvedBreadcrumbs.length - 1 ? (
-                    <Link
-                      key={item.path}
-                      component={ToolpadLink}
-                      underline="hover"
-                      color="inherit"
-                      href={item.path}
-                    >
-                      {getItemTitle(item)}
-                    </Link>
-                  ) : (
-                    <Typography key={item.path} color="text.primary">
-                      {getItemTitle(item)}
-                    </Typography>
-                  );
-                })
-              : null}
-          </Breadcrumbs>
+    <Stack sx={{ my: 2 }} spacing={2} {...rest}>
+      <Stack>
+        <Breadcrumbs aria-label="breadcrumb">
+          {resolvedBreadcrumbs
+            ? resolvedBreadcrumbs.map((item, index) => {
+                return index < resolvedBreadcrumbs.length - 1 ? (
+                  <Link
+                    key={item.path}
+                    component={ToolpadLink}
+                    underline="hover"
+                    color="inherit"
+                    href={item.path}
+                  >
+                    {getItemTitle(item)}
+                  </Link>
+                ) : (
+                  <Typography key={item.path} color="text.primary">
+                    {getItemTitle(item)}
+                  </Typography>
+                );
+              })
+            : null}
+        </Breadcrumbs>
 
-          <PageContentHeader>
-            {title ? <Typography variant="h4">{title}</Typography> : null}
-            <ToolbarComponent {...toolbarSlotProps} />
-          </PageContentHeader>
-        </Stack>
-        <div>{children}</div>
+        <PageContentHeader>
+          {title ? <Typography variant="h4">{title}</Typography> : null}
+          <ToolbarComponent {...toolbarSlotProps} />
+        </PageContentHeader>
       </Stack>
-    </Container>
+      <div>{children}</div>
+    </Stack>
   );
 }
 
