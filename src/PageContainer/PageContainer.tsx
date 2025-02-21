@@ -154,7 +154,7 @@ function PageContainer(props: PageContainerProps) {
   });
 
   return (
-    <Stack sx={{ my: 2 }} spacing={2} {...rest}>
+    <Stack sx={{ m: 2 }} spacing={2} {...rest}>
       <Stack>
         <Breadcrumbs aria-label="breadcrumb">
           {resolvedBreadcrumbs
@@ -177,13 +177,12 @@ function PageContainer(props: PageContainerProps) {
               })
             : null}
         </Breadcrumbs>
-
         <PageContentHeader>
           {title ? <Typography variant="h4">{title}</Typography> : null}
           <ToolbarComponent {...toolbarSlotProps} />
         </PageContentHeader>
       </Stack>
-      <div>{children}</div>
+      {children}
     </Stack>
   );
 }
