@@ -154,7 +154,7 @@ function PageContainer(props: PageContainerProps) {
   });
 
   return (
-    <Stack sx={{ m: 2 }} spacing={2} {...rest}>
+    <Stack sx={{ mx: 3, my: 2 }} spacing={2} {...rest}>
       <Stack>
         <Breadcrumbs aria-label="breadcrumb">
           {resolvedBreadcrumbs
