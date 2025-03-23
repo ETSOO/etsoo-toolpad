@@ -48,6 +48,8 @@ export type PageData = {
   title?: string;
   page?: string;
   breadcrumbs?: Breadcrumb[];
+  noBreadcrumbs?: boolean;
+  noPageHeader?: boolean;
 };
 
 type PageDataAction = PageData | true;
@@ -129,6 +131,7 @@ function PageContainer(props: PageContainerProps) {
 
   React.useLayoutEffect(() => {
     if (loaded.current) {
+      // Reset the page data state
       dispatch(true);
     } else {
       loaded.current = true;
@@ -155,33 +158,37 @@ function PageContainer(props: PageContainerProps) {
 
   return (
     <Stack sx={{ mx: 3, my: 2 }} spacing={2} {...rest}>
-      <Stack>
-        <Breadcrumbs aria-label="breadcrumb">
-          {resolvedBreadcrumbs
-            ? resolvedBreadcrumbs.map((item, index) => {
-                return index < resolvedBreadcrumbs.length - 1 ? (
-                  <Link
-                    key={item.path}
-                    component={ToolpadLink}
-                    underline="hover"
-                    color="inherit"
-                    href={item.path}
-                  >
-                    {getItemTitle(item)}
-                  </Link>
-                ) : (
-                  <Typography key={item.path} color="text.primary">
-                    {getItemTitle(item)}
-                  </Typography>
-                );
-              })
-            : null}
-        </Breadcrumbs>
-        <PageContentHeader>
-          {title ? <Typography variant="h4">{title}</Typography> : null}
-          <ToolbarComponent {...toolbarSlotProps} />
-        </PageContentHeader>
-      </Stack>
+      {state.noPageHeader !== false && (
+        <Stack>
+          {state.noBreadcrumbs !== false && (
+            <Breadcrumbs aria-label="breadcrumb">
+              {resolvedBreadcrumbs
+                ? resolvedBreadcrumbs.map((item, index) => {
+                    return index < resolvedBreadcrumbs.length - 1 ? (
+                      <Link
+                        key={item.path}
+                        component={ToolpadLink}
+                        underline="hover"
+                        color="inherit"
+                        href={item.path}
+                      >
+                        {getItemTitle(item)}
+                      </Link>
+                    ) : (
+                      <Typography key={item.path} color="text.primary">
+                        {getItemTitle(item)}
+                      </Typography>
+                    );
+                  })
+                : null}
+            </Breadcrumbs>
+          )}
+          <PageContentHeader>
+            {title ? <Typography variant="h4">{title}</Typography> : null}
+            <ToolbarComponent {...toolbarSlotProps} />
+          </PageContentHeader>
+        </Stack>
+      )}
       {children}
     </Stack>
   );

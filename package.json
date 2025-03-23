@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/cjs/index.js",
@@ -63,7 +63,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@types/invariant": "2.2.37",
-    "@types/react": "19.0.11",
+    "@types/react": "19.0.12",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "4.3.4",
     "@vitest/browser": "3.0.9",
@@ -71,7 +71,7 @@
     "next": "^15.2.3",
     "next-router-mock": "^0.9.13",
     "playwright": "^1.51.1",
-    "react-router-dom": "7.3.0",
+    "react-router-dom": "7.4.0",
     "vitest": "3.0.9"
   },
   "peerDependenciesMeta": {
