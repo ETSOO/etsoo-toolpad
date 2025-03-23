@@ -158,9 +158,9 @@ function PageContainer(props: PageContainerProps) {
 
   return (
     <Stack sx={{ mx: 3, my: 2 }} spacing={2} {...rest}>
-      {state.noPageHeader !== false && (
+      {state.noPageHeader !== true && (
         <Stack>
-          {state.noBreadcrumbs !== false && (
+          {state.noBreadcrumbs !== true && (
             <Breadcrumbs aria-label="breadcrumb">
               {resolvedBreadcrumbs
                 ? resolvedBreadcrumbs.map((item, index) => {
