@@ -65,7 +65,9 @@ function reducer(state: PageData, action: PageDataAction) {
     if (
       state.breadcrumbs == null &&
       state.title == null &&
-      state.page == null
+      state.page == null &&
+      state.noBreadcrumbs == null &&
+      state.noPageHeader == null
     ) {
       return state;
     } else {
@@ -80,13 +82,16 @@ export function PageDataContextProvider(
   props: React.PropsWithChildren<PageData>
 ) {
   // Destruct
-  const { title, page, breadcrumbs, ...rest } = props;
+  const { title, page, breadcrumbs, noBreadcrumbs, noPageHeader, ...rest } =
+    props;
 
   // useReducer hook to manage state with our reducer function and initial state
   const [state, dispatch] = React.useReducer(reducer, {
     title,
     page,
-    breadcrumbs
+    breadcrumbs,
+    noBreadcrumbs,
+    noPageHeader
   });
 
   // Provide the state and dispatch function to the context value
