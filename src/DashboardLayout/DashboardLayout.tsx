@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { styled, useTheme, type Theme, SxProps } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -22,6 +21,7 @@ import {
 } from "./utils";
 import { TitleBar } from "./TitleBar";
 import { useLocaleText } from "../shared/locales/LocaleContext";
+import { SxProps, Theme, useTheme } from "@mui/material/styles";
 
 export interface SidebarFooterProps {
   mini: boolean;

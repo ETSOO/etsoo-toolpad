@@ -5,7 +5,6 @@ import Link from "@mui/material/Link";
 import Stack, { StackProps } from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useSlotProps from "@mui/utils/useSlotProps";
-import { styled } from "@mui/material";
 import { Link as ToolpadLink } from "../shared/Link";
 import {
   PageContainerToolbar,
@@ -13,6 +12,7 @@ import {
 } from "./PageContainerToolbar";
 import { getItemTitle } from "../shared/navigation";
 import { useActivePage } from "../useActivePage";
+import { styled } from "@mui/material/styles";
 
 const PageContentHeader = styled("div")(({ theme }) => ({
   display: "flex",

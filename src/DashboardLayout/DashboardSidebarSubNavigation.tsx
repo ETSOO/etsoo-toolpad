@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { styled } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Collapse from "@mui/material/Collapse";
 import Divider from "@mui/material/Divider";
@@ -24,6 +23,7 @@ import {
   isPageItemSelected
 } from "../shared/navigation";
 import { getDrawerSxTransitionMixin } from "./utils";
+import { styled } from "@mui/material/styles";
 
 const NavigationListItemButton = styled(ListItemButton)(({ theme }) => ({
   borderRadius: 8,

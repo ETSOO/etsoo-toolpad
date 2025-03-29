@@ -1,6 +1,7 @@
-import * as React from "react";
-import { CircularProgress, Typography, styled } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Error";
+import CircularProgress from "@mui/material/CircularProgress";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 const OverlayRoot = styled("div")(({ theme }) => ({
   position: "absolute",

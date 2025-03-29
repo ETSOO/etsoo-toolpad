@@ -1,12 +1,17 @@
 import * as React from "react";
-import { PaletteMode, Theme, useMediaQuery } from "@mui/material";
-import { ThemeProvider, useColorScheme } from "@mui/material/styles";
+import {
+  PaletteMode,
+  Theme,
+  ThemeProvider,
+  useColorScheme
+} from "@mui/material/styles";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import CssBaseline from "@mui/material/CssBaseline";
 import invariant from "invariant";
 import { useLocalStorageState } from "../useLocalStorageState";
 import { PaletteModeContext } from "../shared/context";
 import type { AppTheme } from "./AppProvider";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const COLOR_SCHEME_ATTRIBUTE = "data-toolpad-color-scheme";
 const COLOR_SCHEME_STORAGE_KEY = "toolpad-color-scheme";

@@ -1,6 +1,6 @@
 import * as React from "react";
-import type { PaletteMode } from "@mui/material";
 import type { Branding, Navigation, Router } from "../AppProvider";
+import { PaletteMode } from "@mui/material/styles";
 
 export const BrandingContext = React.createContext<Branding | null>(null);
 

@@ -1,7 +1,9 @@
-import { Stack, styled, Typography, useTheme } from "@mui/material";
 import { Link } from "../shared/Link";
 import React from "react";
 import { BrandingContext } from "../shared/context";
+import { styled, useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 
 const LogoContainer = styled("div")({
   position: "relative",

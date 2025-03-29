@@ -1,6 +1,6 @@
 "use client";
+import { styled } from "@mui/material/styles";
 import * as React from "react";
-import { styled } from "@mui/material";
 
 const PageContainerToolbarRoot = styled("div")(({ theme }) => ({
   display: "flex",

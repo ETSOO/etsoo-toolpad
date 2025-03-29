@@ -14,7 +14,7 @@ export function AppProviderNextPages(props: AppProviderProps) {
     const params = new URLSearchParams();
     Object.entries(query ?? {}).forEach(([key, value]) => {
       asArray(value ?? []).forEach((v) => {
-        params.append(key, v);
+        params.append(key, v.toString());
       });
     });
     return params.toString();

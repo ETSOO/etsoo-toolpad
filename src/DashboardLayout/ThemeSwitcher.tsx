@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { useTheme } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -8,6 +7,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import { PaletteModeContext } from "../shared/context";
 import useSsr from "../utils/hooks/useSsr";
 import { useLocaleText } from "../shared/locales/LocaleContext";
+import { useTheme } from "@mui/material/styles";
 
 // TODO: When we use this component as the default for a slot, make it non-internal
 /**
