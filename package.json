@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/cjs/index.js",
@@ -61,19 +61,19 @@
     "@babel/preset-env": "^7.26.9",
     "@babel/runtime-corejs3": "^7.27.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@types/invariant": "2.2.37",
-    "@types/node": "^22.13.14",
-    "@types/react": "19.0.12",
-    "@types/react-dom": "19.0.4",
+    "@types/node": "^22.14.0",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
     "@vitejs/plugin-react": "4.3.4",
-    "@vitest/browser": "3.0.9",
+    "@vitest/browser": "3.1.1",
     "jsdom": "^26.0.0",
     "next": "^15.2.4",
     "next-router-mock": "^0.9.13",
     "playwright": "^1.51.1",
     "react-router-dom": "7.4.1",
-    "vitest": "3.0.9"
+    "vitest": "3.1.1"
   },
   "peerDependenciesMeta": {
     "next": {
