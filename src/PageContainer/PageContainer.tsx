@@ -143,12 +143,6 @@ function PageContainer(props: PageContainerProps) {
     }
   }, [activePage?.sourcePath]);
 
-  // Cache the children to avoid re-rendering when the page changes
-  const childrenResult = React.useMemo(
-    () => children,
-    [activePage?.sourcePath]
-  );
-
   let resolvedBreadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
   const title = state.title ?? defaultTitle ?? activePage?.title ?? "";
 
@@ -200,7 +194,7 @@ function PageContainer(props: PageContainerProps) {
           </PageContentHeader>
         </Stack>
       )}
-      {childrenResult}
+      {children}
     </Stack>
   );
 }
