@@ -52,7 +52,7 @@ export type PageData = {
   noPageHeader?: boolean;
 };
 
-type PageDataAction = PageData | true;
+type PageDataAction = PageData;
 
 export const PageDataContext = React.createContext<{
   state: PageData;
@@ -60,19 +60,18 @@ export const PageDataContext = React.createContext<{
 }>({ state: {}, dispatch: (value) => value });
 
 function reducer(state: PageData, action: PageDataAction) {
-  if (action === true) {
-    // Reset the state
-    if (
-      state.breadcrumbs == null &&
-      state.title == null &&
-      state.page == null &&
-      state.noBreadcrumbs == null &&
-      state.noPageHeader == null
-    ) {
-      return state;
-    } else {
-      return {};
+  // Check if the action is the same as the current state
+  let key: keyof PageDataAction;
+  let isSame = true;
+  for (key in action) {
+    if (action[key] !== state[key]) {
+      isSame = false;
+      break;
     }
+  }
+
+  if (isSame) {
+    return state;
   }
 
   return { ...state, ...action };
@@ -116,18 +115,17 @@ type PageContainerBarProps = {
 function PageContainerBar(props: PageContainerBarProps) {
   const { defaultTitle, slots, slotProps } = props;
 
-  const loaded = React.useRef(false);
   const { state, dispatch } = React.useContext(PageDataContext);
 
   const activePage = useActivePage();
 
   React.useLayoutEffect(() => {
-    if (loaded.current) {
-      // Reset the page data state
-      dispatch(true);
-    } else {
-      loaded.current = true;
-    }
+    // Reset the state when the active page changes without rerendering
+    state.breadcrumbs = undefined;
+    state.noBreadcrumbs = undefined;
+    state.noPageHeader = undefined;
+    state.page = undefined;
+    state.title = undefined;
   }, [activePage?.sourcePath]);
 
   let resolvedBreadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
