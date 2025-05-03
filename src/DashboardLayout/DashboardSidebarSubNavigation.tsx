@@ -14,7 +14,6 @@ import type {} from "@mui/material/themeCssVarsAugmentation";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "../shared/Link";
-import { RouterContext } from "../shared/context";
 import type { Navigation } from "../AppProvider";
 import {
   getItemTitle,
@@ -24,6 +23,7 @@ import {
 } from "../shared/navigation";
 import { getDrawerSxTransitionMixin } from "./utils";
 import { styled } from "@mui/material/styles";
+import { useActivePage } from "../useActivePage/useActivePage";
 
 const NavigationListItemButton = styled(ListItemButton)(({ theme }) => ({
   borderRadius: 8,
@@ -76,9 +76,9 @@ function DashboardSidebarSubNavigation({
   hasDrawerTransitions = false,
   selectedItemId
 }: DashboardSidebarSubNavigationProps) {
-  const routerContext = React.useContext(RouterContext);
+  const activePage = useActivePage();
 
-  const pathname = routerContext?.pathname ?? "/";
+  const pathname = activePage?.path ?? "/";
 
   const initialExpandedSidebarItemIds = React.useMemo(
     () =>

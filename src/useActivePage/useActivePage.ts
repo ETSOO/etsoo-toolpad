@@ -15,22 +15,16 @@ export function useActivePage(): ActivePage | null {
   const navigationContext = React.useContext(NavigationContext);
   const routerContext = React.useContext(RouterContext);
 
+  const pageRef = React.useRef<ActivePage>(null);
+
   let pathname = routerContext?.pathname ?? "/";
   const activeItem = matchPath(navigationContext, pathname);
 
-  console.log("useActivePage", pathname, activeItem);
-
-  if (activeItem && activeItem.segment && activeItem.segment !== pathname) {
-    pathname = activeItem.segment;
-  }
-
   const rootItem = matchPath(navigationContext, "/");
 
-  return React.useMemo(() => {
-    if (!activeItem) {
-      return null;
-    }
-
+  if (!activeItem) {
+    pageRef.current = null;
+  } else {
     const breadcrumbs: Breadcrumb[] = [];
 
     if (rootItem) {
@@ -59,11 +53,22 @@ export function useActivePage(): ActivePage | null {
       }
     }
 
-    return {
-      title: getItemTitle(activeItem),
-      path: getItemPath(navigationContext, activeItem),
-      sourcePath: pathname,
-      breadcrumbs
-    };
-  }, [activeItem, rootItem, pathname]);
+    const title = getItemTitle(activeItem);
+    const path = getItemPath(navigationContext, activeItem);
+
+    if (
+      pageRef.current == null ||
+      pageRef.current.title !== title ||
+      pageRef.current.path !== path
+    ) {
+      pageRef.current = {
+        title,
+        path,
+        sourcePath: pathname,
+        breadcrumbs
+      };
+    }
+  }
+
+  return pageRef.current;
 }
