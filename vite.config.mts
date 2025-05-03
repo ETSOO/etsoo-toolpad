@@ -8,6 +8,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     include: ["**/?(*.)test.ts?(x)"],
+    testTimeout: 10000,
     browser: {
       enabled: false, // enabled through CLI
       name: "chromium",

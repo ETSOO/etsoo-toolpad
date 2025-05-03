@@ -98,36 +98,23 @@ export function PageDataContextProvider(
   return <PageDataContext.Provider value={{ state, dispatch }} {...rest} />;
 }
 
-export type PageContainerProps = React.PropsWithChildren<
-  StackProps & {
-    /**
-     * The default title of the page.
-     */
-    defaultTitle?: string;
-    /**
-     * The components used for each slot inside.
-     */
-    slots?: PageContainerSlots;
-    /**
-     * The props used for each slot inside.
-     */
-    slotProps?: PageContainerSlotProps;
-  }
->;
+type PageContainerBarProps = {
+  /**
+   * The default title of the page.
+   */
+  defaultTitle?: string;
+  /**
+   * The components used for each slot inside.
+   */
+  slots?: PageContainerSlots;
+  /**
+   * The props used for each slot inside.
+   */
+  slotProps?: PageContainerSlotProps;
+};
 
-/**
- * A container component to provide a title and breadcrumbs for your pages.
- *
- * Demos:
- *
- * - [Page Container](https://mui.com/toolpad/core/react-page-container/)
- *
- * API:
- *
- * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
- */
-function PageContainer(props: PageContainerProps) {
-  const { children, defaultTitle, slots, slotProps, ...rest } = props;
+function PageContainerBar(props: PageContainerBarProps) {
+  const { defaultTitle, slots, slotProps } = props;
 
   const loaded = React.useRef(false);
   const { state, dispatch } = React.useContext(PageDataContext);
@@ -153,47 +140,72 @@ function PageContainer(props: PageContainerProps) {
     ];
   }
 
-  const ToolbarComponent = props?.slots?.toolbar ?? PageContainerToolbar;
+  const ToolbarComponent = slots?.toolbar ?? PageContainerToolbar;
   const toolbarSlotProps = useSlotProps({
     elementType: ToolbarComponent,
     ownerState: props,
-    externalSlotProps: props?.slotProps?.toolbar,
+    externalSlotProps: slotProps?.toolbar,
     additionalProps: {}
   });
 
+  return state.noPageHeader !== true ? (
+    <Stack>
+      {state.noBreadcrumbs !== true && (
+        <Breadcrumbs aria-label="breadcrumb">
+          {resolvedBreadcrumbs
+            ? resolvedBreadcrumbs.map((item, index) => {
+                return index < resolvedBreadcrumbs.length - 1 ? (
+                  <Link
+                    key={item.path}
+                    component={ToolpadLink}
+                    underline="hover"
+                    color="inherit"
+                    href={item.path}
+                  >
+                    {getItemTitle(item)}
+                  </Link>
+                ) : (
+                  <Typography key={item.path} color="text.primary">
+                    {getItemTitle(item)}
+                  </Typography>
+                );
+              })
+            : null}
+        </Breadcrumbs>
+      )}
+      <PageContentHeader>
+        {title ? <Typography variant="h4">{title}</Typography> : null}
+        <ToolbarComponent {...toolbarSlotProps} />
+      </PageContentHeader>
+    </Stack>
+  ) : undefined;
+}
+
+export type PageContainerProps = React.PropsWithChildren<
+  StackProps & PageContainerBarProps
+>;
+
+/**
+ * A container component to provide a title and breadcrumbs for your pages.
+ *
+ * Demos:
+ *
+ * - [Page Container](https://mui.com/toolpad/core/react-page-container/)
+ *
+ * API:
+ *
+ * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
+ */
+function PageContainer(props: PageContainerProps) {
+  const { children, defaultTitle, slots, slotProps, ...rest } = props;
+
   return (
     <Stack sx={{ mx: 3, my: 2 }} spacing={2} {...rest}>
-      {state.noPageHeader !== true && (
-        <Stack>
-          {state.noBreadcrumbs !== true && (
-            <Breadcrumbs aria-label="breadcrumb">
-              {resolvedBreadcrumbs
-                ? resolvedBreadcrumbs.map((item, index) => {
-                    return index < resolvedBreadcrumbs.length - 1 ? (
-                      <Link
-                        key={item.path}
-                        component={ToolpadLink}
-                        underline="hover"
-                        color="inherit"
-                        href={item.path}
-                      >
-                        {getItemTitle(item)}
-                      </Link>
-                    ) : (
-                      <Typography key={item.path} color="text.primary">
-                        {getItemTitle(item)}
-                      </Typography>
-                    );
-                  })
-                : null}
-            </Breadcrumbs>
-          )}
-          <PageContentHeader>
-            {title ? <Typography variant="h4">{title}</Typography> : null}
-            <ToolbarComponent {...toolbarSlotProps} />
-          </PageContentHeader>
-        </Stack>
-      )}
+      <PageContainerBar
+        defaultTitle={defaultTitle}
+        slots={slots}
+        slotProps={slotProps}
+      />
       {children}
     </Stack>
   );
