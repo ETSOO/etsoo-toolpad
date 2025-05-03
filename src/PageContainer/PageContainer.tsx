@@ -115,12 +115,12 @@ type PageContainerBarProps = {
 function PageContainerBar(props: PageContainerBarProps) {
   const { defaultTitle, slots, slotProps } = props;
 
-  const { state, dispatch } = React.useContext(PageDataContext);
+  const { state } = React.useContext(PageDataContext);
 
   const activePage = useActivePage();
 
   React.useLayoutEffect(() => {
-    // Reset the state when the active page changes without rerendering
+    // Reset the state without rerendering
     state.breadcrumbs = undefined;
     state.noBreadcrumbs = undefined;
     state.noPageHeader = undefined;

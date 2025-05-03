@@ -14,8 +14,15 @@ export interface ActivePage {
 export function useActivePage(): ActivePage | null {
   const navigationContext = React.useContext(NavigationContext);
   const routerContext = React.useContext(RouterContext);
-  const pathname = routerContext?.pathname ?? "/";
+
+  let pathname = routerContext?.pathname ?? "/";
   const activeItem = matchPath(navigationContext, pathname);
+
+  console.log("useActivePage", pathname, activeItem);
+
+  if (activeItem && activeItem.segment && activeItem.segment !== pathname) {
+    pathname = activeItem.segment;
+  }
 
   const rootItem = matchPath(navigationContext, "/");
 
@@ -58,5 +65,5 @@ export function useActivePage(): ActivePage | null {
       sourcePath: pathname,
       breadcrumbs
     };
-  }, [activeItem, rootItem, pathname, navigationContext]);
+  }, [activeItem, rootItem, pathname]);
 }
