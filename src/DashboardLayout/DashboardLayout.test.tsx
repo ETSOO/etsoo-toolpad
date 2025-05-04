@@ -175,6 +175,12 @@ describe("DashboardLayout", () => {
             segment: "traffic",
             title: "Traffic",
             icon: <DescriptionIcon />
+          },
+          {
+            segment: "hidden",
+            title: "Hidden",
+            icon: <DescriptionIcon />,
+            hidden: true
           }
         ]
       }
@@ -198,6 +204,7 @@ describe("DashboardLayout", () => {
 
     expect(within(desktopNavigation).getByText("Sales")).toBeTruthy();
     expect(within(desktopNavigation).getByText("Traffic")).toBeTruthy();
+    expect(within(desktopNavigation).queryByText("Hidden")).toBeNull();
   });
 
   test("shows correct selected page item", () => {
@@ -210,7 +217,14 @@ describe("DashboardLayout", () => {
       {
         title: "Orders",
         segment: "orders",
-        icon: <ShoppingCartIcon />
+        icon: <ShoppingCartIcon />,
+        children: [
+          {
+            segment: "nested",
+            title: "Nested",
+            hidden: true
+          }
+        ]
       },
       {
         segment: "dynamic",
@@ -264,6 +278,11 @@ describe("DashboardLayout", () => {
     expect(
       within(desktopNavigation).getByRole("link", { name: "Dashboard" })
     ).not.toHaveClass("Mui-selected");
+    expect(
+      within(desktopNavigation).getByRole("link", { name: "Orders" })
+    ).toHaveClass("Mui-selected");
+
+    rerender(<AppWithPathname pathname="/orders/nested" />);
     expect(
       within(desktopNavigation).getByRole("link", { name: "Orders" })
     ).toHaveClass("Mui-selected");

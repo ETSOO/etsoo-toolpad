@@ -59,7 +59,8 @@ export function useActivePage(): ActivePage | null {
     if (
       pageRef.current == null ||
       pageRef.current.title !== title ||
-      pageRef.current.path !== path
+      pageRef.current.path !== path ||
+      pageRef.current.sourcePath !== pathname
     ) {
       pageRef.current = {
         title,

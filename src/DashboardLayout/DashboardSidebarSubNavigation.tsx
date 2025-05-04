@@ -78,7 +78,7 @@ function DashboardSidebarSubNavigation({
 }: DashboardSidebarSubNavigationProps) {
   const activePage = useActivePage();
 
-  const pathname = activePage?.path ?? "/";
+  const pathname = activePage?.sourcePath ?? "/";
 
   const initialExpandedSidebarItemIds = React.useMemo(
     () =>
@@ -157,6 +157,18 @@ function DashboardSidebarSubNavigation({
           );
         }
 
+        if (navigationItem.hidden) {
+          return null;
+        }
+
+        let children = navigationItem.children?.filter(
+          (child) =>
+            child.kind === "divider" || child.kind === "header" || !child.hidden
+        );
+        if (children && children.length === 0) {
+          children = undefined;
+        }
+
         const navigationItemFullPath = getPageItemFullPath(
           basePath,
           navigationItem
@@ -178,7 +190,13 @@ function DashboardSidebarSubNavigation({
         // If the item is selected, we don't want to select more
         const isSelected = selectedItemId
           ? false
-          : isPageItemSelected(navigationItem, basePath, pathname);
+          : isPageItemSelected(navigationItem, basePath, pathname) ||
+            navigationItem.children?.some(
+              (child) =>
+                (child.kind === "page" || child.kind == null) &&
+                child.hidden &&
+                isPageItemSelected(child, navigationItemFullPath, pathname)
+            );
 
         if (isSelected && !selectedItemId) {
           selectedItemId = navigationItemId;
@@ -193,12 +211,12 @@ function DashboardSidebarSubNavigation({
             }}
           >
             <NavigationListItemButton
-              selected={isSelected && (!navigationItem.children || isMini)}
+              selected={isSelected && (!children || isMini)}
               sx={{
                 px: 1.4,
                 height: 48
               }}
-              {...(navigationItem.children && !isMini
+              {...(children && !isMini
                 ? {
                     onClick: handleOpenFolderClick(navigationItemId)
                   }
@@ -248,7 +266,7 @@ function DashboardSidebarSubNavigation({
               {navigationItem.action && !isMini && isFullyExpanded
                 ? navigationItem.action
                 : null}
-              {navigationItem.children && !isMini && isFullyExpanded
+              {children && !isMini && isFullyExpanded
                 ? nestedNavigationCollapseIcon
                 : null}
             </NavigationListItemButton>
@@ -265,14 +283,14 @@ function DashboardSidebarSubNavigation({
               listItem
             )}
 
-            {navigationItem.children && !isMini ? (
+            {children && !isMini ? (
               <Collapse
                 in={isNestedNavigationExpanded}
                 timeout="auto"
                 unmountOnExit
               >
                 <DashboardSidebarSubNavigation
-                  subNavigation={navigationItem.children}
+                  subNavigation={children}
                   basePath={navigationItemFullPath}
                   depth={depth + 1}
                   onLinkClick={onLinkClick}
