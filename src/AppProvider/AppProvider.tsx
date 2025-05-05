@@ -36,6 +36,7 @@ export interface NavigationPageItem {
   action?: React.ReactNode;
   children?: Navigation;
   hidden?: boolean;
+  pageHeader?: React.ReactNode;
 }
 
 export interface NavigationSubheaderItem {

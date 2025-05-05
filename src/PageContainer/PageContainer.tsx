@@ -48,8 +48,7 @@ export type PageData = {
   title?: string;
   page?: string;
   breadcrumbs?: Breadcrumb[];
-  noBreadcrumbs?: boolean;
-  noPageHeader?: boolean;
+  pageHeader?: React.ReactNode;
 };
 
 type PageDataAction = PageData;
@@ -64,7 +63,7 @@ function reducer(state: PageData, action: PageDataAction) {
   let key: keyof PageDataAction;
   let isSame = true;
   for (key in action) {
-    if (action[key] !== state[key]) {
+    if (action[key] != state[key]) {
       isSame = false;
       break;
     }
@@ -81,16 +80,14 @@ export function PageDataContextProvider(
   props: React.PropsWithChildren<PageData>
 ) {
   // Destruct
-  const { title, page, breadcrumbs, noBreadcrumbs, noPageHeader, ...rest } =
-    props;
+  const { title, page, breadcrumbs, pageHeader, ...rest } = props;
 
   // useReducer hook to manage state with our reducer function and initial state
   const [state, dispatch] = React.useReducer(reducer, {
     title,
     page,
     breadcrumbs,
-    noBreadcrumbs,
-    noPageHeader
+    pageHeader
   });
 
   // Provide the state and dispatch function to the context value
@@ -98,10 +95,6 @@ export function PageDataContextProvider(
 }
 
 type PageContainerBarProps = {
-  /**
-   * The default title of the page.
-   */
-  defaultTitle?: string;
   /**
    * The components used for each slot inside.
    */
@@ -113,30 +106,21 @@ type PageContainerBarProps = {
 };
 
 function PageContainerBar(props: PageContainerBarProps) {
-  const { defaultTitle, slots, slotProps } = props;
+  const { slots, slotProps } = props;
 
   const { state } = React.useContext(PageDataContext);
 
   const activePage = useActivePage();
 
-  React.useLayoutEffect(() => {
-    // Reset the state without rerendering
-    state.breadcrumbs = undefined;
-    state.noBreadcrumbs = undefined;
-    state.noPageHeader = undefined;
-    state.page = undefined;
-    state.title = undefined;
+  React.useEffect(() => {
+    return () => {
+      // Reset the state when the component unmounts
+      state.breadcrumbs = undefined;
+      state.page = undefined;
+      state.pageHeader = undefined;
+      state.title = undefined;
+    };
   }, [activePage?.sourcePath]);
-
-  let resolvedBreadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
-  const title = state.title ?? defaultTitle ?? activePage?.title ?? "";
-
-  if (state.page) {
-    resolvedBreadcrumbs = [
-      ...resolvedBreadcrumbs,
-      { title: state.page, path: "#" }
-    ];
-  }
 
   const ToolbarComponent = slots?.toolbar ?? PageContainerToolbar;
   const toolbarSlotProps = useSlotProps({
@@ -146,29 +130,38 @@ function PageContainerBar(props: PageContainerBarProps) {
     additionalProps: {}
   });
 
-  return state.noPageHeader !== true ? (
+  const breadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
+  const title = state.title ?? activePage?.title ?? "";
+  const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
+
+  if (pageHeader === false) return undefined;
+  if (pageHeader != null) return pageHeader;
+
+  if (state.page) {
+    breadcrumbs.push({ title: state.page, path: "#" });
+  }
+
+  return (
     <Stack>
-      {state.noBreadcrumbs !== true && (
+      {breadcrumbs && (
         <Breadcrumbs aria-label="breadcrumb">
-          {resolvedBreadcrumbs
-            ? resolvedBreadcrumbs.map((item, index) => {
-                return index < resolvedBreadcrumbs.length - 1 ? (
-                  <Link
-                    key={item.path}
-                    component={ToolpadLink}
-                    underline="hover"
-                    color="inherit"
-                    href={item.path}
-                  >
-                    {getItemTitle(item)}
-                  </Link>
-                ) : (
-                  <Typography key={item.path} color="text.primary">
-                    {getItemTitle(item)}
-                  </Typography>
-                );
-              })
-            : null}
+          {breadcrumbs.map((item, index) => {
+            return index < breadcrumbs.length - 1 ? (
+              <Link
+                key={item.path}
+                component={ToolpadLink}
+                underline="hover"
+                color="inherit"
+                href={item.path}
+              >
+                {getItemTitle(item)}
+              </Link>
+            ) : (
+              <Typography key={item.path} color="text.primary">
+                {getItemTitle(item)}
+              </Typography>
+            );
+          })}
         </Breadcrumbs>
       )}
       <PageContentHeader>
@@ -176,7 +169,7 @@ function PageContainerBar(props: PageContainerBarProps) {
         <ToolbarComponent {...toolbarSlotProps} />
       </PageContentHeader>
     </Stack>
-  ) : undefined;
+  );
 }
 
 export type PageContainerProps = React.PropsWithChildren<
@@ -195,15 +188,11 @@ export type PageContainerProps = React.PropsWithChildren<
  * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
  */
 function PageContainer(props: PageContainerProps) {
-  const { children, defaultTitle, slots, slotProps, ...rest } = props;
+  const { children, slots, slotProps, ...rest } = props;
 
   return (
     <Stack sx={{ mx: 3, my: 2 }} spacing={2} {...rest}>
-      <PageContainerBar
-        defaultTitle={defaultTitle}
-        slots={slots}
-        slotProps={slotProps}
-      />
+      <PageContainerBar slots={slots} slotProps={slotProps} />
       {children}
     </Stack>
   );

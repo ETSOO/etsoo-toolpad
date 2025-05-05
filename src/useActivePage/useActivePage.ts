@@ -9,22 +9,23 @@ export interface ActivePage {
   path: string;
   sourcePath: string;
   breadcrumbs: Breadcrumb[];
+  pageHeader?: React.ReactNode;
 }
 
 export function useActivePage(): ActivePage | null {
   const navigationContext = React.useContext(NavigationContext);
   const routerContext = React.useContext(RouterContext);
 
-  const pageRef = React.useRef<ActivePage>(null);
-
-  let pathname = routerContext?.pathname ?? "/";
+  const pathname = routerContext?.pathname ?? "/";
   const activeItem = matchPath(navigationContext, pathname);
 
   const rootItem = matchPath(navigationContext, "/");
 
-  if (!activeItem) {
-    pageRef.current = null;
-  } else {
+  return React.useMemo(() => {
+    if (!activeItem) {
+      return null;
+    }
+
     const breadcrumbs: Breadcrumb[] = [];
 
     if (rootItem) {
@@ -53,23 +54,12 @@ export function useActivePage(): ActivePage | null {
       }
     }
 
-    const title = getItemTitle(activeItem);
-    const path = getItemPath(navigationContext, activeItem);
-
-    if (
-      pageRef.current == null ||
-      pageRef.current.title !== title ||
-      pageRef.current.path !== path ||
-      pageRef.current.sourcePath !== pathname
-    ) {
-      pageRef.current = {
-        title,
-        path,
-        sourcePath: pathname,
-        breadcrumbs
-      };
-    }
-  }
-
-  return pageRef.current;
+    return {
+      title: getItemTitle(activeItem),
+      path: getItemPath(navigationContext, activeItem),
+      sourcePath: pathname,
+      breadcrumbs,
+      pageHeader: activeItem.pageHeader
+    };
+  }, [activeItem, rootItem, pathname, navigationContext]);
 }
