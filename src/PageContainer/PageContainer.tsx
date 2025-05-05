@@ -99,14 +99,20 @@ type PageContainerBarProps = {
    * The components used for each slot inside.
    */
   slots?: PageContainerSlots;
+
   /**
    * The props used for each slot inside.
    */
   slotProps?: PageContainerSlotProps;
+
+  /**
+   * The component that renders the actions toolbar.
+   */
+  titleBar?: false | ((title: string) => React.ReactNode);
 };
 
 function PageContainerBar(props: PageContainerBarProps) {
-  const { slots, slotProps } = props;
+  const { slots, slotProps, titleBar } = props;
 
   const { state } = React.useContext(PageDataContext);
 
@@ -134,7 +140,10 @@ function PageContainerBar(props: PageContainerBarProps) {
   const title = state.title ?? activePage?.title ?? "";
   const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
 
+  // No page header
   if (pageHeader === false) return undefined;
+
+  // Custom page header
   if (pageHeader != null) return pageHeader;
 
   if (state.page) {
@@ -165,7 +174,11 @@ function PageContainerBar(props: PageContainerBarProps) {
         </Breadcrumbs>
       )}
       <PageContentHeader>
-        {title ? <Typography variant="h4">{title}</Typography> : null}
+        {typeof titleBar === "function" ? (
+          titleBar(title)
+        ) : titleBar === false ? undefined : (
+          <Typography variant="h4">{title}</Typography>
+        )}
         <ToolbarComponent {...toolbarSlotProps} />
       </PageContentHeader>
     </Stack>
@@ -188,11 +201,15 @@ export type PageContainerProps = React.PropsWithChildren<
  * - [PageContainer API](https://mui.com/toolpad/core/api/page-container)
  */
 function PageContainer(props: PageContainerProps) {
-  const { children, slots, slotProps, ...rest } = props;
+  const { children, slots, slotProps, titleBar, ...rest } = props;
 
   return (
     <Stack sx={{ mx: 3, my: 2 }} spacing={2} {...rest}>
-      <PageContainerBar slots={slots} slotProps={slotProps} />
+      <PageContainerBar
+        slots={slots}
+        slotProps={slotProps}
+        titleBar={titleBar}
+      />
       {children}
     </Stack>
   );
