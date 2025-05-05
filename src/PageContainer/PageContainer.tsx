@@ -122,8 +122,11 @@ function PageContainerBar(props: PageContainerBarProps) {
     return () => {
       // Reset the state when the component unmounts
       dispatch({});
+      console.log("PageContainerBar unmounted", activePage?.sourcePath);
     };
   }, [activePage?.sourcePath]);
+
+  console.log("PageContainerBar", activePage?.sourcePath, state);
 
   const ToolbarComponent = slots?.toolbar ?? PageContainerToolbar;
   const toolbarSlotProps = useSlotProps({
@@ -136,6 +139,8 @@ function PageContainerBar(props: PageContainerBarProps) {
   const breadcrumbs = [...(state.breadcrumbs ?? activePage?.breadcrumbs ?? [])];
   const title = state.title ?? activePage?.title ?? "";
   const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
+
+  console.log("PageContainerBar", activePage?.sourcePath, title, breadcrumbs);
 
   // No page header
   if (pageHeader === false) return undefined;

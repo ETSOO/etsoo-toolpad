@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/cjs/index.js",
