@@ -115,16 +115,18 @@ function PageContainerBar(props: PageContainerBarProps) {
   const { slots, slotProps, titleBar } = props;
 
   const { state } = React.useContext(PageDataContext);
+  const stateRef = React.useRef(state);
+  if (state !== stateRef.current) stateRef.current = state;
 
   const activePage = useActivePage();
 
   React.useEffect(() => {
     return () => {
       // Reset the state when the component unmounts
-      state.breadcrumbs = undefined;
-      state.page = undefined;
-      state.pageHeader = undefined;
-      state.title = undefined;
+      stateRef.current.breadcrumbs = undefined;
+      stateRef.current.page = undefined;
+      stateRef.current.pageHeader = undefined;
+      stateRef.current.title = undefined;
     };
   }, [activePage?.sourcePath]);
 
@@ -136,9 +138,11 @@ function PageContainerBar(props: PageContainerBarProps) {
     additionalProps: {}
   });
 
-  const breadcrumbs = state.breadcrumbs ?? activePage?.breadcrumbs ?? [];
-  const title = state.title ?? activePage?.title ?? "";
-  const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
+  const breadcrumbs =
+    stateRef.current.breadcrumbs ?? activePage?.breadcrumbs ?? [];
+  const title = stateRef.current.title ?? activePage?.title ?? "";
+  const pageHeader =
+    stateRef.current.pageHeader ?? activePage?.pageHeader ?? null;
 
   // No page header
   if (pageHeader === false) return undefined;
@@ -146,8 +150,8 @@ function PageContainerBar(props: PageContainerBarProps) {
   // Custom page header
   if (pageHeader != null) return pageHeader;
 
-  if (state.page) {
-    breadcrumbs.push({ title: state.page, path: "#" });
+  if (stateRef.current.page) {
+    breadcrumbs.push({ title: stateRef.current.page, path: "#" });
   }
 
   return (
