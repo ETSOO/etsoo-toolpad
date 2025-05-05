@@ -114,19 +114,9 @@ type PageContainerBarProps = {
 function PageContainerBar(props: PageContainerBarProps) {
   const { slots, slotProps, titleBar } = props;
 
-  const { state, dispatch } = React.useContext(PageDataContext);
+  const { state } = React.useContext(PageDataContext);
 
   const activePage = useActivePage();
-
-  React.useEffect(() => {
-    return () => {
-      // Reset the state when the component unmounts
-      dispatch({});
-      console.log("PageContainerBar unmounted", activePage?.sourcePath);
-    };
-  }, [activePage?.sourcePath]);
-
-  console.log("PageContainerBar", activePage?.sourcePath, state);
 
   const ToolbarComponent = slots?.toolbar ?? PageContainerToolbar;
   const toolbarSlotProps = useSlotProps({
@@ -140,7 +130,13 @@ function PageContainerBar(props: PageContainerBarProps) {
   const title = state.title ?? activePage?.title ?? "";
   const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
 
-  console.log("PageContainerBar", activePage?.sourcePath, title, breadcrumbs);
+  React.useEffect(() => {
+    // Reset the state
+    state.breadcrumbs = undefined;
+    state.page = undefined;
+    state.pageHeader = undefined;
+    state.title = undefined;
+  }, [activePage?.sourcePath]);
 
   // No page header
   if (pageHeader === false) return undefined;
