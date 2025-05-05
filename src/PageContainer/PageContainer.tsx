@@ -53,6 +53,12 @@ export type PageData = {
 
 type PageDataAction = PageData;
 
+function jsonSerialize(obj: unknown) {
+  return JSON.stringify(obj, (_key, value) =>
+    value == null ? undefined : value
+  );
+}
+
 export const PageDataContext = React.createContext<{
   state: PageData;
   dispatch: React.Dispatch<PageDataAction>;
@@ -60,16 +66,7 @@ export const PageDataContext = React.createContext<{
 
 function reducer(state: PageData, action: PageDataAction) {
   // Check if the action is the same as the current state
-  let key: keyof PageDataAction;
-  let isSame = true;
-  for (key in action) {
-    if (action[key] != state[key]) {
-      isSame = false;
-      break;
-    }
-  }
-
-  if (isSame) {
+  if (jsonSerialize(state) === jsonSerialize(action)) {
     return state;
   }
 
@@ -129,14 +126,6 @@ function PageContainerBar(props: PageContainerBarProps) {
   const breadcrumbs = [...(state.breadcrumbs ?? activePage?.breadcrumbs ?? [])];
   const title = state.title ?? activePage?.title ?? "";
   const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
-
-  React.useEffect(() => {
-    // Reset the state
-    state.breadcrumbs = undefined;
-    state.page = undefined;
-    state.pageHeader = undefined;
-    state.title = undefined;
-  }, [activePage?.sourcePath]);
 
   // No page header
   if (pageHeader === false) return undefined;
