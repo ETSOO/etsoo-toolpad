@@ -127,6 +127,8 @@ function PageContainerBar(props: PageContainerBarProps) {
   const title = state.title ?? activePage?.title ?? "";
   const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
 
+  console.log("PageContainerBar", activePage?.sourcePath, title, state);
+
   // No page header
   if (pageHeader === false) return undefined;
 
