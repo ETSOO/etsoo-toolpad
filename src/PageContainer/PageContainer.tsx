@@ -47,17 +47,11 @@ export interface Breadcrumb {
 export type PageData = {
   title?: string;
   page?: string;
-  breadcrumbs?: Breadcrumb[];
+  breadcrumbs?: Breadcrumb[] | ((source: Breadcrumb[]) => Breadcrumb[]);
   pageHeader?: React.ReactNode;
 };
 
 type PageDataAction = PageData | true;
-
-function jsonSerialize(obj: unknown) {
-  return JSON.stringify(obj, (_key, value) =>
-    value == null ? undefined : value
-  );
-}
 
 export const PageDataContext = React.createContext<{
   state: PageData;
@@ -68,11 +62,6 @@ function reducer(state: PageData, action: PageDataAction) {
   // Check if the action is 'reset'
   if (action === true) {
     return {};
-  }
-
-  // Check if the action is the same as the current state
-  if (jsonSerialize(state) === jsonSerialize(action)) {
-    return state;
   }
 
   return { ...state, ...action };
@@ -128,7 +117,7 @@ function PageContainerBar(props: PageContainerBarProps) {
     additionalProps: {}
   });
 
-  const breadcrumbs = [...(state.breadcrumbs ?? activePage?.breadcrumbs ?? [])];
+  const breadcrumbs = [...(activePage?.breadcrumbs ?? [])];
   const title = state.title ?? activePage?.title ?? "";
   const pageHeader = state.pageHeader ?? activePage?.pageHeader ?? null;
 
@@ -142,12 +131,17 @@ function PageContainerBar(props: PageContainerBarProps) {
     breadcrumbs.push({ title: state.page, path: "#" });
   }
 
+  const bc =
+    typeof state.breadcrumbs === "function"
+      ? state.breadcrumbs(breadcrumbs)
+      : state.breadcrumbs ?? breadcrumbs;
+
   return (
     <Stack>
-      {breadcrumbs && (
+      {bc.length > 0 && (
         <Breadcrumbs aria-label="breadcrumb">
-          {breadcrumbs.map((item, index) => {
-            return index < breadcrumbs.length - 1 ? (
+          {bc.map((item, index) => {
+            return index < bc.length - 1 ? (
               <Link
                 key={item.path}
                 component={ToolpadLink}
