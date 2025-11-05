@@ -1,3 +1,4 @@
+import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
@@ -11,8 +12,8 @@ export default defineConfig({
     testTimeout: 10000,
     browser: {
       enabled: false, // enabled through CLI
-      name: "chromium",
-      provider: "playwright",
+      provider: playwright(),
+      instances: [{ browser: "chromium" }],
       headless: !!process.env.CI,
       viewport: {
         width: 1024,
