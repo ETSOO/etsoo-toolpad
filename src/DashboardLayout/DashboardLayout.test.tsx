@@ -45,26 +45,27 @@ describe("DashboardLayout", () => {
       </AppProvider>
     );
 
-    const getBackgroundColorCSSVariable = () =>
-      getComputedStyle(document.documentElement).getPropertyValue(
-        "--mui-palette-common-background"
-      );
-
     const header = screen.getByRole("banner");
 
     const themeSwitcherButton = within(header).getByLabelText(
       "Switch to dark mode"
     );
 
-    expect(getBackgroundColorCSSVariable()).toBe("#fff");
+    expect(
+      document.documentElement.getAttribute("data-toolpad-color-scheme")
+    ).toBe("light");
 
     await user.click(themeSwitcherButton);
 
-    expect(getBackgroundColorCSSVariable()).toBe("#000");
+    expect(
+      document.documentElement.getAttribute("data-toolpad-color-scheme")
+    ).toBe("dark");
 
     await user.click(themeSwitcherButton);
 
-    expect(getBackgroundColorCSSVariable()).toBe("#fff");
+    expect(
+      document.documentElement.getAttribute("data-toolpad-color-scheme")
+    ).toBe("light");
   });
 
   test("navigation works correctly", async () => {
