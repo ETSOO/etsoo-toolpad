@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
-    "target": "ES2020",
+    "target": "ES2022",
     "allowJs": false,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "rootDir": "./src",
     "outDir": "./build/cjs",
     "noEmit": false,
     "declaration": true,
