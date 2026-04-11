@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/cjs/index.js",
@@ -47,13 +47,13 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "7.3.9",
-    "@mui/material": "7.3.9",
-    "@mui/utils": "7.3.9",
+    "@mui/icons-material": "9.0.0",
+    "@mui/material": "9.0.0",
+    "@mui/utils": "9.0.0",
     "invariant": "2.2.4",
     "path-to-regexp": "^6.3.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -64,18 +64,18 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/invariant": "2.2.37",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.1",
-    "@vitest/browser": "4.1.2",
-    "@vitest/browser-playwright": "^4.1.2",
-    "jsdom": "^29.0.1",
-    "next": "^16.2.2",
+    "@vitest/browser": "4.1.4",
+    "@vitest/browser-playwright": "^4.1.4",
+    "jsdom": "^29.0.2",
+    "next": "^16.2.3",
     "next-router-mock": "^1.0.5",
     "playwright": "^1.59.1",
     "react-router-dom": "^7.14.0",
-    "vitest": "4.1.2"
+    "vitest": "4.1.4"
   },
   "peerDependenciesMeta": {
     "next": {

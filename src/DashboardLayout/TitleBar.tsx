@@ -59,7 +59,7 @@ export function TitleBar() {
   if (hasLink) {
     return (
       <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
-        <Stack direction="row" alignItems="center">
+        <Stack direction="row" sx={{ alignItems: "center" }}>
           {branding?.logo && <LogoContainer>{branding.logo}</LogoContainer>}
           {titleUI}
         </Stack>

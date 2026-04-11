@@ -31,7 +31,7 @@ export function ErrorOverlay({ error }: ErrorOverlayProps) {
       >
         <ErrorIcon color="error" /> Error
       </Typography>
-      <Typography textAlign="center">
+      <Typography align="center">
         {(error as any)?.message ?? "Unknown error"}
       </Typography>
     </OverlayRoot>

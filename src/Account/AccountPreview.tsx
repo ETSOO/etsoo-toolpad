@@ -120,13 +120,12 @@ function AccountPreview(props: AccountPreviewProps) {
     return (
       <Stack
         direction="row"
-        justifyContent="flex-start"
         spacing={2}
-        padding={2}
+        sx={{ padding: 2, justifyContent: "flex-start" }}
       >
         {avatarContent}
-        <Stack direction="column" justifyContent="space-evenly">
-          <Typography variant="body2" fontWeight="bolder" noWrap>
+        <Stack direction="column" sx={{ justifyContent: "space-evenly" }}>
+          <Typography variant="body2" noWrap sx={{ fontWeight: "bolder" }}>
             {session.user?.name}
           </Typography>
           <Typography variant="caption" noWrap>
