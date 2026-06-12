@@ -4,11 +4,26 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      "react-transition-group/TransitionGroupContext":
+        "react-transition-group/esm/TransitionGroupContext.js"
+    }
+  },
   test: {
     setupFiles: ["vitest.setup.ts", "@testing-library/jest-dom/vitest"],
     globals: true,
     environment: "jsdom",
     include: ["**/?(*.)test.ts?(x)"],
+    server: {
+      deps: {
+        inline: [
+          /@mui\/x-data-grid.*/,
+          /@mui\/material.*/,
+          /react-transition-group.*/
+        ]
+      }
+    },
     testTimeout: 10000,
     browser: {
       enabled: false, // enabled through CLI
