@@ -1,6 +1,6 @@
 {
   "name": "@etsoo/toolpad",
-  "version": "1.0.52",
+  "version": "1.0.53",
   "author": "ETSOO",
   "description": "Dashboard framework extention based on Toolpad Core",
   "main": "build/cjs/index.js",
@@ -42,9 +42,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "9.1.1",
-    "@mui/material": "9.1.2",
-    "@mui/utils": "9.1.1",
+    "@mui/icons-material": "9.2.0",
+    "@mui/material": "9.2.0",
+    "@mui/utils": "9.2.0",
     "invariant": "2.2.4",
     "path-to-regexp": "^6.3.0",
     "react": "^19.2.7",
